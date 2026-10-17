@@ -1,0 +1,7 @@
+
+Routing: Forward requests to the correct microservice.
+JWT security: Validate access tokens before allowing protected requests.
+Rate limiting: Restrict excessive requests from a client.
+Other capabilities: Logging, metrics, CORS, request/response transformation, and sometimes load balancing.
+
+    

@@ -1,0 +1,454 @@
+
+1. Microservices Architecture — Top Priority
+
+# 1) What are microservices, and why do we use them?
+
+ Microservices are an architectural style in which a large application is divided into small, independent services, each responsible for a specific business capability.
+
+Each service can be developed, deployed, scaled, and maintained independently, with clearly defined communication between services.
+
+# Real-world example: Amazon-like application
+
+![alt text](../images/image.png)
+
+# Why do we use Microservices?
+1. Independent scaling
+Suppose Product Service receives 10,000 requests per second, but Shipping Service receives only 500. We can scale Product Service separately instead of scaling the entire application.
+Hindi: जिस service पर ज्यादा traffic है, सिर्फ उसी के ज्यादा instances चला सकते हैं।
+
+2. Independent deployment
+A Payment Service bug fix can be deployed without redeploying Product, Order, and Shipping services, assuming compatibility and deployment dependencies are managed correctly.
+
+3. Team independence
+Separate teams can own Product, Order, and Payment services, including their code, testing, and operational responsibilities.
+
+4. Fault isolation
+If Shipping Service becomes unavailable, Product browsing may continue. However, order fulfillment may be delayed, and the overall business flow must handle the failure properly.
+
+5. Easier business-focused ownership
+Each service can have a focused codebase and clear business responsibility, making it easier to evolve parts of a large system.
+
+# How do we create Microservices using Spring Boot?
+For example:
+- product-service — port 8081
+- order-service — port 8082
+- payment-service — port 8083
+- api-gateway — port 8080
+
+# Production scenario: What happens when Payment Service fails?
+Imagine a real e-commerce application:
+1. The customer places an order.
+2. Order Service creates an order with status PENDING.
+3. Order Service requests payment processing.
+4. Payment Service takes 10 seconds to respond because its database is overloaded.
+5. Requests begin timing out, and threads or connections may become exhausted.
+
+What should a senior developer do?
+
+Step 1 — Find the root cause
+Check p95/p99 latency, error rate, distributed traces, database query time, connection pool usage, and thread pool saturation.
+
+
+Step 2 — Set timeouts
+Do not allow Order Service to wait indefinitely for Payment Service.
+
+
+Step 3 — Prevent cascading failures
+Use a circuit breaker, bounded retries with backoff, and bulkheads where appropriate. Do not retry payment operations blindly.
+
+
+Step 4 — Make payment processing safe
+Use idempotency keys to prevent duplicate charges. Reconcile uncertain payment outcomes before retrying.
+
+
+Step 5 — Handle business consistency
+Keep the order in an appropriate pending state, then confirm, retry safely, or compensate according to the business workflow. For multi-service transactions, consider the Saga pattern.
+
+---
+Step 1 — Find the root cause
+
+Metric / tool                    ===	Simple meaning	                                ==Example problem
+p95 latency 	             95% of requests finish within this time	        Most requests are fast, but some are slow
+p99 latency	                99% of requests finish within this time	            A small number of requests take a very long time
+Error rate	                 Percentage of requests that fail	                Payment API returns many 5xx errors
+Distributed trace	        Shows the time spent in each service	            Order Service takes 50 ms, Payment Service takes 4 seconds
+Database query              time	Time taken to execute SQL	                A missing index causes slow queries
+Connection pool usage	    How many database connections are busy	            All connections are occupied
+Thread pool saturation	    Whether worker threads are all busy	                Requests wait for a free thread
+
+Step 2 — Set timeouts
+A timeout puts an upper limit on how long a service waits for another service.
+Without an appropriate timeout, requests can remain blocked for too long, consuming threads or connections and potentially affecting unrelated requests.
+For example, if Payment Service is taking 10 seconds to respond, Order Service should not wait indefinitely.
+
+Step 3 — Prevent cascading failures
+Suppose Payment Service becomes slow. Order Service keeps calling it, more requests get stuck, and eventually Order Service may also become unhealthy.
+This is called a cascading failure.
+Three common protections help.
+
+A. Circuit breaker
+If failures exceed a configured threshold, temporarily stop sending calls to the failing dependency.
+- CLOSED: Calls are allowed.
+- OPEN: Calls are rejected quickly.
+- HALF_OPEN: A limited number of test calls check whether recovery has occurred.
+
+B. Bounded retries with backoff
+Retry only appropriate transient failures, with a limited number of attempts and a delay between attempts.
+Example: retry a temporary connection failure once after a short delay, provided the payment operation is safe to retry.
+
+C. Bulkhead
+Limit how many concurrent calls can occupy resources for one dependency, so it cannot consume all available capacity and starve other work.
+
+Step 4 — Make payment processing safe
+This is one of the most important production concepts.
+Imagine this sequence:
+1. Order Service sends a payment request.
+2. Payment Provider charges ₹5,000.
+3. The response is lost because of a network timeout.
+4. Order Service retries the request.
+5. The customer is charged again.
+The original request may have succeeded even though the caller received no response.
+Solution: Idempotency key
+An idempotency key identifies one logical payment operation. Repeating the same operation with the same key should not create another charge.
+
+Step 5 — Handle business consistency using the Saga pattern
+Now suppose Order Service and Payment Service each have their own database.
+Order Service saves the order successfully, but Payment Service cannot complete the payment. There is no single ordinary database transaction that automatically rolls back changes across both services.
+The Saga pattern manages a business transaction across multiple services using local transactions and, when necessary, compensating actions.
+Example: Order and Payment workflow
+
+![alt text](../images/image-1.png)
+
+
+==========================================================================================================================
+
+# 2) Explain monolithic architecture vs. microservices architecture.
+
+1. Understand the basic difference
+
+Monolithic architecture: The application is built and deployed as one unit, usually containing multiple business modules.
+
+Microservices architecture: The application is divided into multiple independently deployable services, each responsible for a specific business capability.
+
+2. Architecture diagrams
+
+![alt text](../images/image-2.png)
+
+
+3. Key differences
+
+![alt text](../images/image-3.png)
+
+4. When would you choose each architecture?
+Choose a monolith when…
+
+- You are building a new application with a small team.
+- The business requirements are still changing rapidly.
+- The modules have tightly related business transactions.
+- Simpler testing, deployment, and operations are important.
+
+Choose microservices when…
+
+- Different business capabilities need independent releases.
+- Different services have substantially different scaling needs.
+- Multiple teams can own clear service boundaries.
+- Your organization can support distributed monitoring, automation, and failure recovery.
+
+
+==========================================================================================================================
+
+
+# 3) What are the advantages and disadvantages of microservices?
+
+# 1. Advantages of Microservices
+ Summary table for interviews  ![alt text](../images/image-4.png)
+
+
+1. Independent scalability
+Meaning: Scale only the service that needs additional capacity.
+
+Production example: An e-commerce Product Service receives 20,000 requests/second, while Payment Service receives 500. You can scale Product Service independently.
+
+Spring Boot: Run multiple instances behind a load balancer, or use Kubernetes autoscaling based on appropriate metrics.
+
+Trade-off: More instances mean more infrastructure cost, and scaling won't fix a shared database bottleneck.
+
+    Why Scaling Out Shifts the Bottleneck
+
+    • Connection Pool Exhaustion: Every new instance you spin up initializes its own database connection pool (e.g., HikariCP maxing out at 10 or 20 connections per instance). If your database server has a hard limit of 100 total concurrent connections, scaling from 5 application instances to 15 will completely overwhelm the database's capacity, causing new instances to crash or hang while waiting for database sockets.
+    • Lock Contention: If your database bottleneck is caused by multiple threads trying to write to or update the exact same tables (e.g., inventory or wallet balances), adding more instances just multiplies the number of concurrent processes fighting for row or table locks.
+
+    How to Fix a Shared Database Bottleneck
+
+    If scaling the application layer doesn't work, you must resolve the bottleneck at the data layer using these strategies:
+    1. Read-Write Splitting (Replication): Direct all POST/PUT/DELETE (write) operations to a primary database, and route all GET (read) traffic to one or more read-replicas. Since read traffic usually makes up 80–90% of web app loads, this drastically relieves pressure on the primary engine.
+    2. Caching Layer: Introduce an in-memory data store like Redis or Memcached in front of the database. Cache frequently read, slow-changing data (like product catalogs or user profiles) so application instances don't have to query the database for every single request.
+    3. Database Sharding: Horizontally partition the database itself. For example, store user data for IDs 1–1,000,000 on DB Server A, and IDs 1,000,001–2,000,000 on DB Server B.
+    4. Database Migration to Microservice-Per-DB: If you are running a true microservice architecture, break the shared database apart entirely. Give each microservice its own dedicated database, ensuring they can only communicate via network APIs (REST/gRPC) or asynchronous event message brokers (Kafka/RabbitMQ).
+
+2. Independent deployment
+
+Meaning: Release one service without redeploying the entire application.
+
+Production example: Fix a payment-validation bug and deploy Payment Service independently.
+
+Spring Boot: Build a separate JAR or container image and deploy it through a CI/CD pipeline.
+
+Trade-off: Independent deployment requires backward-compatible APIs, automated tests, and safe configuration changes.
+
+
+    1. Backward-Compatible APIs
+
+    When you modify a service's REST API or messaging schema, older versions of upstream services will still be calling it. You cannot simply delete or rename fields.
+    • The Strategy: Use the Expand and Contract Pattern (also known as Parallel Change).
+        1. Expand: Add the new field/endpoint to the API while keeping the old one active.
+        2. Transition: Update all upstream consumer services to start using the new field.
+        3. Contract: Once monitoring shows zero traffic hitting the old field, safely delete it.
+    • Best Practices: Use explicit API Versioning in your URLs (e.g., /api/v1/users shifting to /api/v2/users) and always design schemas to ignore unknown properties so older clients don't crash when you add new data fields.
+
+    2. Automated Testing (Consumer-Driven Contracts)
+
+    Traditional integration tests require spinning up the entire microservice ecosystem, which is slow, flaky, and expensive. Independent deployment requires a smarter approach.
+    • The Strategy: Contract Testing (using tools like Pact).
+    • How it works: The consumer service (e.g., Frontend) writes a "contract" defining exactly what fields it expects from the provider service (e.g., User Service) and in what format.
+    • The Benefit: This contract is automatically run against the provider service during its CI/CD build pipeline. If the User Service team tries to make a breaking change that violates the contract, the automated test fails immediately—preventing a broken API from ever reaching production.
+
+    3. Safe Configuration Changes
+
+    Config changes (like updating feature flags, database URLs, or timeouts) are historically the leading cause of major cloud outages. In an independent deployment model, separating code deployment from configuration deployment is critical.
+    • The Strategy: GitOps and Dynamic Configuration.
+    • How it works: Store configurations in a dedicated, version-controlled repository (e.g., using Spring Cloud Config or ArgoCD).
+    • The Benefit: Changes are applied via Pull Requests, allowing for peer reviews, automated validation, and instant rollbacks. Applications should ideally read these changes dynamically without requiring a full container restart, minimizing downtime.
+
+3. Better fault isolation
+
+Meaning: A failure in one service does not necessarily bring down every other service.
+
+Production example: Shipping Service becomes unavailable, but customers may still browse products.
+
+Spring Boot: Use timeouts, Resilience4j circuit breakers, bulkheads, and controlled fallbacks.
+
+Trade-off: Poorly handled dependencies can still cause cascading failures.
+
+
+        Engineering Strategies to Break the Chain
+
+        To prevent runtime dependencies from turning into single points of failure, you must design your system to be fault-tolerant by default:
+
+        1. Graceful Degradation (Fallbacks)
+
+        If a non-critical downstream dependency fails, the upstream service should drop that feature instead of failing the entire request.
+        • Example: If the Recommendation Service is down, the Homepage Service should still load the user's dashboard, substituting personalized recommendations with a static list of popular, hardcoded items.
+
+        2. Strict Network Timeouts
+
+        Never rely on default framework timeouts, which are often set to infinity or minutes.
+        • Action: Every single external HTTP, gRPC, or database call must have tight connect and read timeouts (e.g., 500ms). If the downstream service doesn't answer in time, fail fast, release the thread, and handle the error.
+
+        3. Asynchronous Communication (Event-Driven Architecture)
+
+        The absolute best way to handle dependencies is to eliminate synchronous runtime dependencies entirely where possible.
+        • Action: Instead of Service A making a blocking REST call to Service B, use a message broker like Apache Kafka or RabbitMQ. Service A emits an event (e.g., OrderCreated) and immediately returns a success status to the user. Service B processes that event asynchronously whenever it is ready. If Service B goes down, the messages safely queue up in the broker without affecting the user experience.
+
+        4. Defensive Operational Patterns
+
+        As mentioned in your previous steps, enforce isolation boundary patterns at the code level:
+        • Circuit Breakers: Cut the connection to a failing dependency instantly to give it time to recover.
+        • Bulkheads: Limit the maximum percentage of system resources any single dependency can consume.
+        Would you like to explore how to transition a synchronous REST API workflow into an asynchronous event-driven architecture using Kafka or RabbitMQ, or should we evaluate fault-injection testing (Chaos Engineering) to proactively find these hidden dependency traps?
+
+4. Independent team ownership
+
+Meaning: Different teams can own separate business capabilities.
+
+Production example: One team owns Orders, another owns Payments, and another owns Inventory.
+
+Benefit: Teams can develop and release features with less coordination when service boundaries are clear.
+
+Trade-off: Poor ownership boundaries can create dependencies, duplicated work, and team conflicts.
+
+5. Better business separation
+
+Meaning: Each service has a clearly defined business responsibility.
+
+Production example: Payment Service manages payment operations, while Order Service manages order lifecycle.
+
+Benefit: Changes to one business capability can be easier to understand and maintain.
+
+Trade-off: Incorrect service boundaries can create excessive communication between services.
+
+6. Technology flexibility
+Meaning: Services can use different technologies when there is a justified need.
+Production example: Spring Boot for order processing and a Python service for a specialized machine-learning capability.
+Trade-off: Multiple languages, frameworks, and databases increase hiring, maintenance, monitoring, and operational complexity.
+
+# 2. Disadvantages of Microservices
+
+1. Network latency and communication failures
+Problem: Services communicate over a network, unlike ordinary method calls inside a single application.
+Production scenario: Order Service calls Inventory, Payment, and Shipping. Each call adds latency and another possible failure point.
+Solution: Set sensible timeouts, reduce unnecessary synchronous calls, and use asynchronous messaging where appropriate.
+
+2. Distributed transactions and data consistency
+Problem: Each service may maintain its own database, so a single local database transaction cannot atomically commit changes across all services.
+Production scenario: An order is created, but payment fails.
+Solution: Use a Saga workflow, idempotency, durable events, and reconciliation where required. Compensating actions may be necessary.
+
+3. Difficult troubleshooting
+Problem: A single customer request may pass through several services.
+Production scenario: The API takes 5 seconds, but it is unclear whether the delay is in the gateway, Order Service, Payment Service, or a database.
+Solution: Use centralized logs, correlation IDs, distributed tracing, metrics, and alerts.
+
+3. Difficult troubleshooting
+Problem: A single customer request may pass through several services.
+Production scenario: The API takes 5 seconds, but it is unclear whether the delay is in the gateway, Order Service, Payment Service, or a database.
+Solution: Use centralized logs, correlation IDs, distributed tracing, metrics, and alerts.
+
+4. Higher infrastructure and operational cost
+Problem: Many services require deployment pipelines, monitoring, security, networking, and resource management.
+Production scenario: A small application with 20 services needs a platform team and substantial infrastructure before the business requires that complexity.
+Solution: Start with a modular monolith when appropriate, automate repetitive operations, and extract services only when the benefits justify the cost.
+
+5. More complex security
+Problem: Every network boundary needs appropriate authentication, authorization, and secure communication.
+Production scenario: An internal Payment API is accidentally accessible without adequate service-to-service authorization.
+Solution: Use Spring Security, OAuth 2.0/OIDC where appropriate, least-privilege access, and secure service-to-service communication. An API Gateway alone is not sufficient security.
+
+6. Testing and API compatibility become harder
+Problem: A change in one service may break its consumers.
+Production scenario: Payment Service changes a response field, and an older Order Service version fails to parse it.
+Solution: Use contract tests, backward-compatible API evolution, integration tests, and controlled rollouts.
+
+==========================================================================================================================
+
+
+# 4) When would you choose a monolith over microservices?
+
+Senior-level answer: I would choose a monolithic architecture when the application has relatively simple business requirements, the team is small, the modules do not need independent scaling or deployment, and the operational cost of microservices would outweigh their benefits.
+
+In many situations, I would prefer a modular monolith: one deployable Spring Boot application with clearly separated business modules. It keeps deployment simple without sacrificing good code organization.
+
+#   1 . When should we choose a monolith?
+
+    1. Small development team
+    If 3–5 developers are building an application, managing separate repositories, deployment pipelines, service discovery, and monitoring for many services may create unnecessary overhead.
+    Example: A small team develops an employee management application using Spring Boot and MySQL.
+
+    2. Early-stage product or MVP
+    When requirements change frequently, one application is easier to build, test, and modify.
+    Example: A startup is building its first e-commerce application and is still discovering what customers need.
+    Later, it can extract services when real requirements justify doing so.
+
+    3. Strong need for simple database transactions
+    When several operations must succeed or fail together in one database, a monolith can use a single local transaction.
+    Example: Transferring money between two accounts stored in the same database, where both balance updates must be atomic.
+    With microservices, a workflow spanning independently owned databases requires additional consistency design.
+
+    4. No need for independent scaling
+    If Product, Order, and Customer modules have similar traffic and resource requirements, scaling the entire application may be sufficient.
+    Example: An internal company portal used by a few hundred employees.
+
+    5. Limited DevOps or platform maturity
+    If the organization lacks automated deployments, distributed monitoring, reliable service-to-service security, and incident-management processes, starting with microservices may introduce operational risks.
+    A monolith is often easier to deploy and troubleshoot initially.
+
+#    2. Architecture example: Modular monolith using Spring Boot
+
+![alt text](image-5.png)
+
+==========================================================================================================================
+
+# 5)How do you identify service boundaries in a business domain?
+1. First, understand the meaning
+Service boundaries define which business responsibilities belong inside a particular microservice and which responsibilities should belong to another service.
+In simple English: Which functionality should stay together, and where should we separate it?
+For example, in an e-commerce application, should Product, Order, Payment, and Shipping be separate services? To answer that, we must understand the business domain first.
+
+3. Five steps to identify service boundaries
+1 Understand the business domain
+Talk to business analysts, product owners, and domain experts. Identify business processes, rules, and important workflows.
+Example: product browsing, order placement, payment, shipment, and returns.
+Hindi: Pehle samjho business actually kaise kaam karta hai.
+
+
+
+2 Identify business capabilities
+Group related functionality around a single business responsibility.
+Example:
+- Product catalog → Product Service
+- Order lifecycle → Order Service
+- Payments and refunds → Payment Service
+Do not create a separate service for every controller, table, or API.
+
+
+
+3 Use Domain-Driven Design (DDD)
+Identify bounded contexts: areas where business terms, rules, and models have a consistent meaning.
+For example, OrderStatus and PaymentStatus are different concepts. An order can be PENDING_PAYMENT while a payment is PROCESSING.
+DDD helps determine where one domain model should stop and another should begin.
+
+
+
+4 Check data ownership and consistency
+Each service should own its data and enforce its own business rules. Other services should access that information through APIs or events.
+Example: Payment Service owns payment records; Order Service owns order records.
+Ask whether the business operation requires one local transaction or can handle eventual consistency across services.
+
+
+
+5 Validate the boundaries against real operational needs
+Consider independent deployment, scaling, security, availability, team ownership, and change frequency.
+If two proposed services constantly call each other for every small operation, they may be split incorrectly—or need a better interaction design.
+
+
+
+4. How do you know whether two functions belong in the same service?
+
+![alt text](image-6.png)
+
+==========================================================================================================================
+
+# 6) What is Domain-Driven Design (DDD)?
+Domain-Driven Design (DDD) is an approach to designing software around the business domain, its rules, and its processes.
+
+How does the business work, and what rules must the software enforce?
+
+2. The most important DDD concepts
+
+1. Domain
+The business area your application solves.
+Example: e-commerce, banking, insurance, or healthcare.
+Hindi: Business kis field ka hai, woh domain hai.
+
+2. Ubiquitous Language
+Developers and business experts use the same business terms and meanings.
+Example: everyone understands what Order Confirmed, Payment Pending, and Refunded mean.
+Hindi: Business team aur developers ek hi terminology use karein.
+
+3. Bounded Context — especially important for microservices
+A boundary within which a business model and its terminology have a specific meaning.
+Example: OrderStatus belongs to the order context, while PaymentStatus belongs to the payment context.
+A bounded context is a strong candidate for a microservice boundary, but it does not automatically have to be a separate microservice.
+
+4. Entity
+An object identified by its identity, even when its other attributes change.
+Example: Order with orderId = 101. Its status can change from PENDING to CONFIRMED, but it remains the same order.
+
+5. Value Object
+An object defined by its values rather than a unique identity.
+Example: Money(5000, "INR") or an address. Two Money objects with the same amount and currency can be considered equal.
+Value objects are often immutable.
+
+6. Aggregate and Aggregate Root
+An aggregate groups related domain objects and protects business rules. The aggregate root is the main entry point for modifying that group.
+Example: Order can control its order items and prevent invalid changes after cancellation.
+
+7. Repository
+An abstraction for retrieving and storing domain objects without making the domain depend directly on database details.
+Example: OrderRepository saves and retrieves orders. In Java, Spring Data JPA can help implement it.
+
+==========================================================================================================================
+
+# 7) 
+
+

@@ -1,0 +1,279 @@
+
+1. Microservices Architecture — Top Priority
+1. What are microservices, and why do we use them?
+2. Explain monolithic architecture vs. microservices architecture.
+3. What are the advantages and disadvantages of microservices?
+4. When would you choose a monolith over microservices?
+5. How do you identify service boundaries in a business domain?
+6. What is Domain-Driven Design (DDD)?
+7. Explain bounded context with a real-world example.
+8. What is the difference between a modular monolith and microservices?
+9. How do you decide whether a service should be split into smaller services?
+10. What is the Single Responsibility Principle in microservices?
+11. How do you avoid tightly coupled microservices?
+12. What is a distributed system, and what challenges does it introduce?
+13. What is the difference between synchronous and asynchronous communication?
+14. How do you handle cross-cutting concerns across multiple services?
+15. How do you design a microservices architecture for an e-commerce application?
+Senior-level scenario questions
+16. An application has 30 microservices, and every change requires modifying five services. How would you improve the architecture?
+17. How would you migrate a large monolithic Java application to microservices?
+18. How do you prevent a distributed monolith?
+19. How do you decide service ownership between development teams?
+20. What trade-offs would you explain to management before adopting microservices?
+2. Spring Boot and Microservices Development
+21. What is Spring Boot, and why is it commonly used for microservices?
+22. Explain dependency injection and inversion of control.
+23. What happens internally when a Spring Boot application starts?
+24. Explain @SpringBootApplication.
+25. What is the difference between @Component, @Service, @Repository, and @Controller?
+26. How do you implement global exception handling using @ControllerAdvice?
+27. How do you validate REST request payloads?
+28. How do you manage environment-specific configuration using Spring profiles?
+29. How do you externalize configuration for multiple services?
+30. What is Spring Boot Actuator, and how do you use health endpoints?
+31. How do you implement pagination, sorting, and filtering in REST APIs?
+32. How do you secure Spring Boot microservices?
+33. How do you manage database transactions using @Transactional?
+34. What is the difference between RestTemplate, WebClient, and Spring HTTP interfaces?
+35. How do you write unit tests and integration tests for a microservice?
+36. How do you manage dependencies and version compatibility across services?
+37. How do you implement API versioning without breaking existing clients?
+38. How do you handle graceful shutdown and in-flight requests?
+39. How do you troubleshoot high memory usage in a Spring Boot service?
+40. How do you diagnose slow API response times in production?
+3. API Gateway, Service Discovery and Load Balancing
+41. What is an API Gateway, and why do we need one?
+42. What responsibilities should an API Gateway handle?
+43. Explain routing, authentication, rate limiting, and request filtering at the gateway.
+44. What is the difference between an API Gateway and a load balancer?
+45. What is service discovery?
+46. Explain client-side vs. server-side service discovery.
+47. What are Eureka, Consul, and Kubernetes service discovery?
+48. How does Spring Cloud Gateway work?
+49. How do you configure routes in Spring Cloud Gateway?
+50. How do you implement JWT validation at the gateway?
+51. Should downstream services validate security tokens independently?
+52. How do you prevent the API Gateway from becoming a single point of failure?
+53. How do you implement rate limiting for a particular client or API?
+54. What happens if a service instance becomes unavailable during request routing?
+55. How would you debug a gateway returning 404, 502, or 503?
+4. Inter-Service Communication and REST APIs
+56. How do microservices communicate with each other?
+57. When would you use REST instead of messaging?
+58. What are the advantages of asynchronous communication?
+59. What is the difference between HTTP and messaging-based communication?
+60. How do you handle timeouts between services?
+61. How do you prevent cascading failures caused by slow downstream services?
+62. What are idempotent APIs, and why are they important?
+63. How would you implement idempotency for a payment API?
+64. What is the difference between HTTP PUT and PATCH?
+65. How do you handle duplicate requests?
+66. How do you propagate correlation IDs and trace IDs across services?
+67. How do you handle backward compatibility when changing an API response?
+68. What is the difference between orchestration and choreography?
+69. How do you handle partial failures in a multi-service business transaction?
+70. How would you design an Order service that calls Inventory and Payment services?
+5. Resilience and Fault Tolerance
+71. What is the Circuit Breaker pattern?
+72. Explain the Closed, Open, and Half-Open states of a circuit breaker.
+73. What is the difference between retry and circuit breaker?
+74. When should you avoid retries?
+75. What is exponential backoff with jitter?
+76. What is a bulkhead pattern?
+77. What is the difference between a timeout, retry, and fallback?
+78. What is a rate limiter?
+79. How does Resilience4j work with Spring Boot?
+80. What is a cascading failure, and how can you prevent it?
+81. How do you design a system that remains available when one service is down?
+82. What is graceful degradation?
+83. How do you prevent retry storms?
+84. How do you configure circuit breaker thresholds?
+85. How would you troubleshoot a circuit breaker that keeps opening in production?
+Must-know example: If the Payment service is slow, the Order service should not wait indefinitely. Set a timeout, use carefully bounded retries where safe, apply a circuit breaker, and define a business-appropriate fallback. Never assume a timed-out payment definitely failed.
+6. Kafka and Event-Driven Microservices
+86. What is Apache Kafka, and why is it used in microservices?
+87. Explain topics, partitions, brokers, producers, and consumers.
+88. What is a consumer group?
+89. How does Kafka maintain message ordering?
+90. What is the difference between at-most-once, at-least-once, and exactly-once processing?
+91. How do you handle duplicate Kafka messages?
+92. What is an idempotent consumer?
+93. What is the difference between Kafka and RabbitMQ?
+94. How do you handle failed messages?
+95. What is a dead-letter topic or dead-letter queue?
+96. What is consumer lag, and how do you troubleshoot it?
+97. How do you choose the number of partitions?
+98. What happens when a Kafka consumer crashes?
+99. What is a Kafka rebalance?
+100. How do you manage message schemas and backward compatibility?
+101. What is the Outbox pattern, and how does it prevent lost events?
+102. How do you handle ordering when events are processed asynchronously?
+103. How do you prevent duplicate business operations when messages are redelivered?
+104. What are Kafka transactions, and when are they useful?
+105. Design an Order → Payment → Inventory workflow using Kafka.
+7. Distributed Transactions and Data Consistency
+106. Why are distributed transactions difficult in microservices?
+107. Why should each microservice generally own its database?
+108. What is the difference between strong consistency and eventual consistency?
+109. Explain the Saga pattern.
+110. What is the difference between Saga orchestration and choreography?
+111. What are compensating transactions?
+112. How would you reverse a payment if inventory reservation fails?
+113. What is the Two-Phase Commit protocol?
+114. Why might you avoid distributed two-phase commit in microservices?
+115. What is the Transactional Outbox pattern?
+116. What is Change Data Capture (CDC)?
+117. How do you maintain consistency between a database and Kafka?
+118. What is CQRS?
+119. What is Event Sourcing?
+120. How do you handle concurrent updates to the same business entity?
+Senior-level scenario: An order is saved in the database, but the application crashes before publishing the OrderCreated event. How would you ensure the event is eventually published without losing it?
+8. Database Design and Performance
+121. What is database-per-service architecture?
+122. Why should two microservices avoid directly sharing the same tables?
+123. How do you perform joins across data owned by different services?
+124. How do you manage schema changes without downtime?
+125. What is optimistic locking vs. pessimistic locking?
+126. How do indexes improve database performance?
+127. How do you investigate a slow SQL query?
+128. What is connection pooling, and how do you configure HikariCP?
+129. How can connection pool exhaustion occur?
+130. How do you implement pagination for large datasets?
+131. How do you manage read replicas and read/write separation?
+132. How do you handle duplicate records under concurrent requests?
+133. How do you prevent N+1 query problems in JPA/Hibernate?
+134. How do you manage database migrations using Flyway or Liquibase?
+135. How do you ensure data consistency during a service migration?
+9. Security in Microservices
+136. What is OAuth 2.0?
+137. What is OpenID Connect (OIDC)?
+138. What is the difference between authentication and authorization?
+139. Explain JWT structure and how JWT validation works.
+140. How do you implement role-based access control (RBAC)?
+141. What is the difference between access tokens and refresh tokens?
+142. How do you secure service-to-service communication?
+143. What is mutual TLS (mTLS)?
+144. How do you manage secrets such as database passwords and API keys?
+145. How do you prevent a client from bypassing the API Gateway?
+146. How do you handle token expiration and revocation?
+147. How do you implement rate limiting against abuse?
+148. How do you secure sensitive data in logs?
+149. What security risks arise when services trust each other implicitly?
+150. How would you investigate a suspected unauthorized request in production?
+10. Docker, Kubernetes and Deployment
+151. What is Docker, and why do microservices use containers?
+152. What is the difference between a Docker image and a container?
+153. How do you create a Dockerfile for a Spring Boot application?
+154. What is Docker Compose, and when would you use it?
+155. What is Kubernetes?
+156. Explain Pods, Deployments, Services, ConfigMaps, and Secrets.
+157. What is the difference between a Kubernetes Service and an API Gateway?
+158. What are readiness, liveness, and startup probes?
+159. What is Horizontal Pod Autoscaling (HPA)?
+160. How do you scale a stateless microservice?
+161. How do you deploy a new version without downtime?
+162. Explain rolling, blue-green, and canary deployments.
+163. What is the difference between a rolling deployment and a canary deployment?
+164. How do you roll back a faulty deployment?
+165. How do you manage configuration across development, staging, and production?
+166. How do you handle graceful shutdown in Kubernetes?
+167. What happens when a Pod repeatedly crashes?
+168. How do you troubleshoot CrashLoopBackOff, ImagePullBackOff, and OOMKilled?
+169. How do you configure resource requests and limits?
+170. How would you deploy a complete Spring Boot microservices application to Kubernetes?
+11. Monitoring, Logging and Distributed Tracing
+171. What is the difference between monitoring, logging, and tracing?
+172. What are the four golden signals of monitoring?
+173. How do you use Spring Boot Actuator in production?
+174. What is Micrometer?
+175. What is the role of Prometheus and Grafana?
+176. What is the ELK/EFK stack?
+177. What is distributed tracing?
+178. How do OpenTelemetry and Jaeger help debug distributed applications?
+179. What are trace IDs and span IDs?
+180. How do you trace a slow request across five microservices?
+181. How do you define service-level indicators (SLIs), service-level objectives (SLOs), and service-level agreements (SLAs)?
+182. How do you configure alerts without generating too many false alarms?
+183. How do you monitor Kafka consumer lag?
+184. How do you identify a memory leak in a Java microservice?
+185. What metrics would you monitor for a production Spring Boot service?
+12. Microservices System Design — Very Important for Senior Roles
+These questions test your ability to design a complete system and justify your architectural decisions.
+186. Design an e-commerce application using microservices.
+187. Design an online payment processing system.
+188. Design an order management system with Inventory, Payment, and Notification services.
+189. Design a URL-shortening service using microservices.
+190. Design a food delivery platform.
+191. Design a ticket-booking system that prevents overselling.
+192. Design a notification service supporting email, SMS, and push notifications.
+193. Design a high-throughput transaction processing system.
+194. Design a product catalog with millions of products.
+195. Design a system that handles 10,000 requests per second.
+196. How would you make a microservices application highly available across multiple availability zones?
+197. How would you design for disaster recovery?
+198. How would you handle a sudden tenfold increase in traffic?
+199. How would you reduce p99 API latency?
+200. How would you estimate infrastructure requirements before deployment?
+For every system-design question, practice explaining:
+- Requirements and assumptions.
+- Architecture and service boundaries.
+- API contracts and data ownership.
+- Communication and event flows.
+- Security and failure handling.
+- Scaling, observability, and deployment.
+- Trade-offs and alternatives.
+13. Production Troubleshooting Scenarios
+These are especially useful for a developer with 10 years of experience because interviewers want evidence of practical problem-solving.
+201. An API that normally responds in 200 ms suddenly takes 5 seconds. How do you investigate?
+202. CPU utilization reaches 95% after deployment. What do you check first?
+203. Memory usage continuously increases until the service crashes. How do you diagnose it?
+204. The service works locally but fails in production. How do you troubleshoot it?
+205. An API Gateway returns 502 Bad Gateway. What could be wrong?
+206. A service returns 503 Service Unavailable. How do you identify the cause?
+207. A REST endpoint returns 404 through the gateway but works directly. What do you check?
+208. The database connection pool is exhausted. How do you resolve it?
+209. Kafka consumer lag increases continuously. What steps do you take?
+210. A message is processed twice, resulting in duplicate payments. How do you prevent recurrence?
+211. Orders remain stuck in PENDING status. How would you investigate?
+212. One downstream service is unavailable, causing multiple services to fail. How do you contain the incident?
+213. After deployment, error rates increase. How do you decide whether to roll back?
+214. Two services disagree about the status of an order. How do you reconcile the data?
+215. A database migration succeeds in one instance but fails in another. What is your approach?
+216. The application works after restart but becomes slow after several hours. What would you investigate?
+217. How do you troubleshoot intermittent timeouts that cannot be reproduced locally?
+218. How do you handle a production incident when logs do not contain enough information?
+219. How would you conduct a root-cause analysis (RCA)?
+220. Describe a critical production incident you resolved, including impact, root cause, mitigation, and prevention.
+14. Advanced Architecture and Design Patterns
+221. What is the Strangler Fig pattern?
+222. What is the Anti-Corruption Layer pattern?
+223. What is the Backend for Frontend (BFF) pattern?
+224. What is the Sidecar pattern?
+225. What is a service mesh, and when would you use Istio or Linkerd?
+226. What is the difference between orchestration and choreography in distributed workflows?
+227. What is the Ambassador pattern?
+228. What is a distributed cache, and when would you use Redis?
+229. How do you maintain cache consistency across services?
+230. What is cache stampede, and how do you prevent it?
+231. How do you design multi-tenant microservices?
+232. How do you handle API composition and aggregation?
+233. What is the difference between CQRS and traditional CRUD?
+234. How do you design event-driven systems with eventual consistency?
+235. How do you avoid overengineering a microservices architecture?
+15. Senior Developer and Technical Leadership Questions
+236. How do you review a microservices architecture proposed by another team?
+237. How do you establish coding standards across multiple services?
+238. How do you handle disagreements over architectural decisions?
+239. How do you mentor junior developers on distributed systems?
+240. How do you decide whether to introduce a new technology such as Kafka?
+241. How do you evaluate the cost and benefits of splitting a service?
+242. How do you plan and execute a zero-downtime migration?
+243. How do you ensure backward compatibility across independently deployed services?
+244. How do you improve deployment frequency and reduce production failures?
+245. How do you prioritize technical debt?
+246. How do you handle an architectural decision that turns out to be wrong?
+247. Describe a design decision you made and the trade-offs involved.
+248. How do you communicate technical risks to non-technical stakeholders?
+249. How do you measure the success of a microservices architecture?
+250. Describe a project where you owned architecture, development, deployment, and production support.

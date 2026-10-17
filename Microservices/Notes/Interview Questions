@@ -1,0 +1,14 @@
+
+What is Spring Boot?
+
+Spring Boot is an open-source, Java-based framework used to build standalone, production-ready applications with minimal effort. It is built directly on top of the traditional Spring Framework
+Core Features 
+• Auto-Configuration: It automatically configures your application based on the dependencies you add. For example, if you add a database dependency, Spring Boot configures the database connection automatically.
+• Opinionated 'Starter' Dependencies: Instead of manually searching for and matching compatible library versions, you can use "starter" packs (like spring-boot-starter-web). These bundle all required dependencies into a single, verified package.
+• Embedded Servers: It includes built-in servers like Tomcat or Jetty. This means you can package your application into a single .jar file and run it directly anywhere, without needing to install an external web server
+
+-   Spring boot is a spring based framework which is open source and developed by Pivotal Team.
+-   Spring Boot provides AutoConfiguration which means reduce Common lines of code in Application which is written by Programmers and handles Jars with version management. (i.e. Providing Configuration code XML/Java and maintaining all jars required for Project Parent Jars + Child Jars)
+------------------------------
+
+
