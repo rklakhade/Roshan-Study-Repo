@@ -1,0 +1,299 @@
+Hibernate & JPA Interview Questions for 10 Years of Experience
+For a Senior Java Developer with 10 years of experience, Hibernate and JPA interviews usually focus on ORM internals, entity relationships, transaction management, SQL performance, caching, concurrency, and real-world production issues.
+Below is a 250-question interview preparation bank, organized by topic and priority for Java Developer, Senior Java Developer, and Tech Lead interviews.
+Priority guide
+P1
+Must prepare first
+Entity lifecycle, relationships, fetching, cascading, transactions, N+1 queries, caching.
+
+
+
+P2
+Senior-level depth
+Dirty checking, persistence context, locking, batching, pagination, transaction propagation.
+
+
+
+P3
+Advanced topics
+Inheritance mapping, custom types, Envers, multi-tenancy, production troubleshooting.
+
+
+
+1. JPA and Hibernate Fundamentals
+1. What is JPA, and why do we use it?
+2. What is Hibernate?
+3. What is the difference between JPA and Hibernate?
+4. Is JPA an implementation or a specification?
+5. What are the advantages and disadvantages of ORM?
+6. What is the difference between JDBC and Hibernate?
+7. What is the role of EntityManager?
+8. What is the difference between EntityManager and Hibernate Session?
+9. What is a persistence unit?
+10. What is the role of persistence.xml?
+11. How does Spring Boot configure Hibernate automatically?
+12. What is an entity in JPA?
+13. What are the requirements for an entity class?
+14. What is the purpose of @Entity and @Table?
+15. What is the difference between @Column and @Basic?
+16. What is the purpose of @Id?
+17. What is the difference between @Transient and Java's transient keyword?
+18. What is the difference between persist() and merge()?
+19. What is the difference between find() and getReference()?
+20. When would you use Hibernate instead of plain JDBC?
+2. Entity Lifecycle and Persistence Context
+21. Explain the lifecycle states of a JPA entity.
+22. What is the difference between transient, managed, detached, and removed states?
+23. What is a persistence context?
+24. What is the first-level cache in Hibernate?
+25. Is the first-level cache enabled by default?
+26. How does dirty checking work?
+27. What happens when a managed entity's field is modified?
+28. What is the difference between flush() and commit()?
+29. Does calling flush() commit a transaction?
+30. What is the purpose of clear()?
+31. What is the difference between detach() and clear()?
+32. What happens when an entity is detached and then modified?
+33. How does merge() handle detached entities?
+34. What happens if the same database row is loaded twice within one persistence context?
+35. What is the purpose of refresh()?
+36. When does Hibernate execute SQL statements?
+37. What is write-behind behavior in Hibernate?
+38. How does automatic dirty checking affect performance?
+39. What is the difference between save(), persist(), and merge()?
+40. How would you troubleshoot an entity that is not being updated in the database?
+3. Entity Relationships and Mapping
+41. Explain @OneToOne, @OneToMany, @ManyToOne, and @ManyToMany.
+42. What is the difference between unidirectional and bidirectional relationships?
+43. What is the owning side of a relationship?
+44. What is the purpose of mappedBy?
+45. What happens if mappedBy is missing or configured incorrectly?
+46. How do you map a one-to-many relationship between Department and Employee?
+47. Why is @ManyToOne commonly used for foreign-key relationships?
+48. What is the difference between a foreign key and a join table?
+49. How do you map a many-to-many relationship?
+50. Why might you replace a many-to-many relationship with an explicit join entity?
+51. What is the difference between @JoinColumn and @JoinTable?
+52. How do you map a composite primary key?
+53. What is the difference between @EmbeddedId and @IdClass?
+54. What is @Embeddable?
+55. What is @Embedded?
+56. How do you map an entity that has multiple address fields?
+57. How do you map enum values using @Enumerated?
+58. What is the difference between EnumType.STRING and EnumType.ORDINAL?
+59. How do you map inheritance using JPA?
+60. What are SINGLE_TABLE, JOINED, and TABLE_PER_CLASS strategies?
+4. Fetch Types, Lazy Loading and N+1 Queries
+61. What is lazy loading?
+62. What is eager loading?
+63. What are the default fetch types for @OneToMany and @ManyToOne?
+64. Why is lazy fetching often preferred?
+65. What is LazyInitializationException?
+66. Why does LazyInitializationException occur?
+67. How do you solve LazyInitializationException without making every relationship eager?
+68. What is the N+1 query problem?
+69. How do you identify an N+1 query problem?
+70. How do you solve N+1 using JOIN FETCH?
+71. What is a JPA Entity Graph?
+72. What is the difference between an Entity Graph and JOIN FETCH?
+73. What is batch fetching in Hibernate?
+74. What is the purpose of @BatchSize?
+75. What is the difference between @Fetch(FetchMode.JOIN), SELECT, and SUBSELECT?
+76. Why can eager fetching sometimes cause performance problems?
+77. Can a lazy relationship be fetched eagerly for only one query?
+78. Why can pagination fail or behave unexpectedly with collection fetch joins?
+79. How would you optimize an API that returns 100 orders, each with order items?
+80. How do you avoid loading unnecessary entity relationships in REST APIs?
+5. Cascading and Orphan Removal
+81. What is cascading in JPA?
+82. Explain CascadeType.PERSIST, MERGE, REMOVE, REFRESH, and DETACH.
+83. What does CascadeType.ALL mean?
+84. What is the difference between cascade remove and orphanRemoval = true?
+85. When should you use orphanRemoval?
+86. What happens when a child is removed from a parent's collection?
+87. Does deleting a parent automatically delete its children?
+88. Why can CascadeType.ALL be dangerous on a many-to-many relationship?
+89. How do you manage a parent-child relationship correctly?
+90. What happens if you save a parent without cascading persistence to a new child?
+91. What is the difference between database-level ON DELETE CASCADE and JPA cascading?
+92. Can cascading cause unexpected database deletions?
+93. How do you handle orphan records?
+94. How do you maintain both sides of a bidirectional relationship?
+95. Why should entity helper methods update both sides of a relationship?
+6. Transactions and Spring Integration
+96. What is the purpose of @Transactional?
+97. How does Spring's declarative transaction management work?
+98. What is the difference between JPA transactions and Spring transactions?
+99. What are transaction propagation levels?
+100. Explain REQUIRED and REQUIRES_NEW.
+101. What is the difference between SUPPORTS, MANDATORY, NOT_SUPPORTED, and NEVER?
+102. What are transaction isolation levels?
+103. What is the difference between READ_COMMITTED and REPEATABLE_READ?
+104. What is a dirty read?
+105. What is a non-repeatable read?
+106. What is a phantom read?
+107. When does Spring roll back a transaction?
+108. Why does @Transactional typically roll back for unchecked exceptions but not checked exceptions by default?
+109. How do you configure rollback for a checked exception?
+110. Why might @Transactional not work when one method calls another method in the same class?
+111. What is the difference between class-level and method-level @Transactional?
+112. What happens if a transactional method is private in a typical Spring proxy-based setup?
+113. What is transaction propagation in a nested service call?
+114. What happens when an exception is caught and swallowed inside a transactional method?
+115. Why should long-running external API calls generally be avoided inside database transactions?
+7. Caching in Hibernate
+116. What is the first-level cache?
+117. What is the second-level cache?
+118. What is the query cache?
+119. What is the difference between first-level and second-level caching?
+120. Is second-level caching enabled by default?
+121. How do you enable second-level caching?
+122. What cache providers can be integrated with Hibernate?
+123. What is the role of Ehcache or Infinispan?
+124. Does the query cache store entity objects directly?
+125. How does Hibernate invalidate cached data?
+126. What are cache concurrency strategies?
+127. When should you avoid caching an entity?
+128. How do you prevent stale cached data?
+129. How does cache configuration affect clustered applications?
+130. How would you investigate a production issue involving stale entity data?
+8. Performance Optimization
+131. What causes slow Hibernate queries?
+132. How do you identify unnecessary SQL queries?
+133. How do you enable SQL logging?
+134. What is JDBC batching?
+135. How do you configure Hibernate batch inserts and updates?
+136. Why can GenerationType.IDENTITY limit insert batching in Hibernate?
+137. Why should large batch operations periodically call flush() and clear()?
+138. How do you process millions of records efficiently?
+139. What is the difference between pagination using Page and Slice in Spring Data JPA?
+140. How do you optimize count queries used by pagination?
+141. What is the difference between offset pagination and keyset pagination?
+142. Why should you avoid fetching large collections unnecessarily?
+143. How do indexes affect Hibernate query performance?
+144. How do you use EXPLAIN to optimize generated SQL?
+145. When would you use a native SQL query instead of JPQL?
+146. What is the difference between entity queries and DTO projections?
+147. How do you prevent excessive entity hydration?
+148. How do you optimize a query with multiple joins?
+149. What is the impact of the Open Session in View pattern?
+150. How would you investigate an API that became slow after introducing Hibernate?
+9. Concurrency and Locking
+151. What is optimistic locking?
+152. What is pessimistic locking?
+153. What is the purpose of @Version?
+154. How does Hibernate detect concurrent updates?
+155. What is OptimisticLockException?
+156. How do you handle optimistic locking failures?
+157. What is LockModeType.PESSIMISTIC_READ?
+158. What is LockModeType.PESSIMISTIC_WRITE?
+159. When should you use pessimistic locking instead of optimistic locking?
+160. How do you prevent lost updates?
+161. How do transaction isolation and entity locking differ?
+162. Can two transactions modify the same entity simultaneously?
+163. How do you handle concurrent inventory updates?
+164. How do you prevent overselling when multiple orders arrive simultaneously?
+165. How do you troubleshoot database lock waits caused by Hibernate?
+10. JPQL, Criteria API and Spring Data JPA
+166. What is JPQL?
+167. What is the difference between JPQL and SQL?
+168. What is the Criteria API?
+169. When would you use Criteria API instead of JPQL?
+170. What are named queries?
+171. What is the difference between native queries and JPQL queries?
+172. What is Spring Data JPA?
+173. What is the difference between CrudRepository, PagingAndSortingRepository, and JpaRepository?
+174. How do derived query methods work?
+175. How do you write custom queries using @Query?
+176. What is the purpose of @Modifying?
+177. Why should bulk update and delete queries be used carefully?
+178. What happens to the persistence context after a bulk update?
+179. What is the difference between getSingleResult() and getResultList()?
+180. How do you implement dynamic search criteria for multiple optional filters?
+11. Advanced Mapping and Entity Design
+181. What is the difference between an entity and a DTO?
+182. Why should entities generally not be exposed directly through REST APIs?
+183. What is the purpose of @MappedSuperclass?
+184. What is the difference between @MappedSuperclass and entity inheritance?
+185. How does @AttributeOverride work?
+186. What is @SecondaryTable?
+187. How do you map JSON columns using Hibernate?
+188. How do you map a read-only entity or database view?
+189. What are entity callbacks such as @PrePersist and @PreUpdate?
+190. What are entity listeners?
+191. What is the purpose of @CreationTimestamp and @UpdateTimestamp?
+192. How do you implement auditing in Spring Data JPA?
+193. What are @NaturalId and natural keys in Hibernate?
+194. How do you implement soft deletion?
+195. What are the trade-offs of using generated identifiers versus business keys?
+12. Hibernate Internals and Advanced Concepts
+196. What happens internally when Hibernate saves an entity?
+197. Explain the Hibernate SessionFactory.
+198. Why is SessionFactory generally thread-safe while a Session is not?
+199. What is the role of the Hibernate persistence context?
+200. How does Hibernate generate SQL?
+201. What is bytecode enhancement?
+202. What is proxy-based lazy loading?
+203. What is the difference between an entity proxy and a fully initialized entity?
+204. How does Hibernate handle database-generated identifiers?
+205. What are identifier generation strategies?
+206. Explain SEQUENCE, IDENTITY, TABLE, and AUTO.
+207. What is the difference between sequence allocation size and sequence increment?
+208. What is the purpose of @DynamicUpdate?
+209. What are Hibernate filters?
+210. What is multi-tenancy in Hibernate?
+13. Production Troubleshooting Scenarios
+211. Your application executes hundreds of SQL queries for one API call. How do you investigate?
+212. An API throws LazyInitializationException only in production. How do you troubleshoot it?
+213. Database connections are exhausted. How do you identify whether Hibernate transactions are holding connections too long?
+214. Inserts are slow when importing 500,000 records. How would you optimize them?
+215. An update silently does not persist. What would you check?
+216. Two users update the same record, and one overwrites the other's changes. How do you prevent this?
+217. A query works in SQL but fails when executed through JPQL. What could be wrong?
+218. A paginated API returns duplicate or missing records. How would you investigate?
+219. Application memory grows during a large batch job. How can the persistence context contribute?
+220. Hibernate reports stale data after an external SQL update. How would you resolve it?
+221. A service has high database CPU usage after a new release. What Hibernate-related causes would you investigate?
+222. A bidirectional relationship causes infinite JSON serialization. How would you fix it?
+223. A cascade delete removes more data than expected. How do you prevent recurrence?
+224. A deployment changes entity mappings and fails on startup. How would you investigate schema compatibility?
+225. A production application suffers from intermittent deadlocks. How would you use logs, SQL traces, and database diagnostics to identify the cause?
+14. Modern JPA and Architecture-Level Questions
+226. What changed in Jakarta Persistence compared with older JPA versions?
+227. Why did javax.persistence become jakarta.persistence?
+228. What compatibility concerns arise when migrating to Spring Boot 3 or later?
+229. How do you manage database schema migrations using Flyway or Liquibase?
+230. When would you choose JDBC or jOOQ instead of JPA?
+231. What are the trade-offs between ORM convenience and direct SQL control?
+232. How do you manage entities and transactions in microservices?
+233. Why should each microservice generally own its data?
+234. How do you avoid holding a database transaction open while calling another microservice?
+235. How do you implement idempotent database operations in a payment service?
+236. How do you manage optimistic locking in a distributed application?
+237. How do you handle eventual consistency when multiple services update related business data?
+238. How do you implement audit trails for critical business changes?
+239. How do you prevent sensitive information from appearing in SQL logs?
+240. How would you design a high-throughput order persistence layer?
+15. Senior Developer and Technical Leadership Questions
+241. How do you establish Hibernate coding standards across a development team?
+242. How do you review entity mappings for performance and maintainability?
+243. How do you decide between entity relationships and explicit queries?
+244. How do you identify and prioritize ORM-related technical debt?
+245. How do you migrate a legacy JDBC application to Spring Data JPA?
+246. How would you migrate from an older Hibernate version to a newer version safely?
+247. How do you evaluate whether second-level caching is worth introducing?
+248. Describe a difficult ORM performance problem you solved in production.
+249. How do you explain an ORM-related architectural trade-off to management?
+250. What lessons have you learned from a production issue involving transactions, locking, or data consistency?
+
+Recommended preparation order
+For your Java Developer interview preparation, study these areas first:
+Priority	Topics	Questions
+1	Entity lifecycle, persistence context, dirty checking	21–40
+2	Relationships, lazy/eager loading, N+1	41–80
+3	Transactions and Spring integration	96–115
+4	Caching and performance optimization	116–150
+5	Locking and concurrency	151–165
+6	JPQL and Spring Data JPA	166–180
+7	Production scenarios	211–225
+My recommendation: For a 10-year candidate, prepare each important topic in four parts: definition, internal working, practical code, and a production scenario. Interviewers often ask follow-up questions that test whether you understand the consequences of your design decisions.

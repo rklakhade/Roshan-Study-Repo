@@ -1,0 +1,279 @@
+AI Interview Questions for a Java Developer with 10 Years of Experience — 2026
+
+
+Recommended preparation order
+For your Java interview preparation, focus first on these areas rather than attempting to learn all 200 questions at once.
+
+Priority 1 — Java + Spring Boot AI integration
+Questions 46–65
+Learn how to call an LLM, create an AI service, validate outputs, handle timeouts, and test the integration.
+
+Priority 2 — RAG
+Questions 66–85
+Understand document chunking, embeddings, vector search, retrieval, grounding, and permission enforcement.
+
+Priority 3 — Microservices and resilience
+Questions 116–130
+Prepare timeouts, circuit breakers, Kafka, asynchronous processing, scaling, and fallback strategies.
+
+Priority 4 — Security and production
+Questions 131–175
+Prepare prompt injection, PII protection, cost controls, testing, evaluation, and observability.
+
+Priority 5 — System design and leadership
+Questions 186–200
+Practise explaining architecture, trade-offs, business value, production risks, and design decisions.
+
+
+For a senior Java Full Stack Developer, AI interview questions are increasingly relevant because enterprise applications are integrating Large Language Models (LLMs), Retrieval-Augmented Generation (RAG), AI agents, and AI-powered APIs.
+At 10 years of experience, interviewers may evaluate not only AI definitions, but also how you integrate AI with Spring Boot, design secure and scalable systems, handle failures, control costs, and deploy AI features in production.
+Below is a structured question bank of 200 AI interview questions, organized by topic and difficulty.
+1. AI, Machine Learning, and Generative AI fundamentals
+Questions 1–15 · Beginner to intermediate
+1. What is Artificial Intelligence (AI)?
+2. What is the difference between AI, Machine Learning, and Deep Learning?
+3. What is Generative AI?
+4. What is the difference between traditional AI and Generative AI?
+5. What is a Large Language Model (LLM)?
+6. How does an LLM generate text?
+7. What are tokens in AI models?
+8. What is tokenization?
+9. What are parameters in an AI model?
+10. What is a foundation model?
+11. What is the difference between a pretrained model and a fine-tuned model?
+12. What are the common limitations of Generative AI?
+13. What is a hallucination in an LLM?
+14. What is prompt engineering?
+15. What is the difference between deterministic software logic and probabilistic AI output?
+2. LLM architecture and concepts
+Questions 16–30 · Intermediate
+16. What is the Transformer architecture?
+17. What is the attention mechanism?
+18. What is self-attention?
+19. What are embeddings in LLMs?
+20. What is a context window?
+21. What happens when a prompt exceeds the context window?
+22. What are temperature and top-p in text generation?
+23. What is the difference between an encoder-only, decoder-only, and encoder-decoder model?
+24. What is inference in an LLM?
+25. What is quantization in AI?
+26. What is the difference between open-weight and proprietary AI models?
+27. What is multimodal AI?
+28. What is the difference between reasoning models and general-purpose language models?
+29. What are model parameters and hyperparameters?
+30. How would you choose an appropriate LLM for an enterprise application?
+3. Prompt engineering and output control
+Questions 31–45 · Practical
+31. What is a system prompt?
+32. What is the difference between system, user, and developer instructions?
+33. What are zero-shot, one-shot, and few-shot prompting?
+34. What is chain-of-thought prompting, and what are its limitations?
+35. What is prompt templating?
+36. How do you design prompts for consistent business responses?
+37. How can you make an LLM return valid JSON?
+38. What is structured output in AI applications?
+39. How do you validate an LLM response against a Java DTO?
+40. What is prompt injection?
+41. How do you defend against prompt injection?
+42. How do you manage reusable prompts across environments?
+43. How do you reduce unnecessary tokens in prompts?
+44. How do you handle ambiguous user prompts?
+45. How do you evaluate whether a prompt is producing reliable results?
+4. Integrating AI with Java and Spring Boot
+Questions 46–65 · High priority for Java developers
+46. How can a Java application integrate with an LLM?
+47. How would you build an AI-powered REST API using Spring Boot?
+48. What is Spring AI?
+49. What is the difference between Spring AI and LangChain4j?
+50. How do you connect Spring AI to a hosted LLM provider?
+51. How do you configure AI model credentials securely?
+52. How would you design an AiService layer in Spring Boot?
+53. How do you call an AI API using Java's HttpClient?
+54. How can you use Spring's WebClient for AI API calls?
+55. How do you handle timeouts when calling an LLM?
+56. How do you handle rate limits and HTTP 429 responses?
+57. How do you implement retries for temporary AI provider failures?
+58. Why can indiscriminate retries increase cost and latency?
+59. How would you implement streaming AI responses in Java?
+60. How can Server-Sent Events (SSE) be used to stream LLM output?
+61. How do you validate and sanitize AI-generated content?
+62. How do you prevent blocking operations from exhausting application threads?
+63. How do you test AI integrations without calling a real model?
+64. How do you externalize model names, endpoints, and parameters?
+65. How would you build an AI integration that supports multiple model providers?
+Example architecture: Spring Boot + AI
+Client application
+Web / mobile application
+
+Spring Boot REST API
+Authentication · Validation · Rate limiting
+
+AI service layer
+Prompt templates · Context · Output validation
+
+LLM provider
+Answer generation
+
+
+Business data
+SQL / vector database
+
+
+
+
+Production example: An e-commerce application uses Spring Boot to answer product questions. The API authenticates the user, retrieves authorized product data, calls the LLM with relevant context, validates the response, and returns the result. The LLM should not independently decide prices, stock availability, or payment outcomes.
+5. RAG — Retrieval-Augmented Generation
+Questions 66–85 · Very important
+66. What is Retrieval-Augmented Generation (RAG)?
+67. Why is RAG needed when LLMs already have training knowledge?
+68. Explain the complete RAG workflow.
+69. What is a document loader?
+70. What is document chunking?
+71. How do you choose chunk size and overlap?
+72. What are embeddings, and how are they used in RAG?
+73. What is a vector database?
+74. What is similarity search?
+75. What is cosine similarity?
+76. What is the difference between vector search and keyword search?
+77. What is hybrid search?
+78. What is metadata filtering in vector search?
+79. What is a reranker?
+80. How do you prevent RAG from retrieving irrelevant documents?
+81. How do you handle document updates and deletions?
+82. How do you enforce user-level document permissions in RAG?
+83. How do you evaluate RAG answer quality?
+84. How do you reduce hallucinations in a RAG application?
+85. How would you build an internal company-document chatbot using Spring Boot?
+6. AI frameworks, tools, and model integration
+Questions 86–100 · Intermediate to advanced
+86. What is Spring AI, and what capabilities does it provide?
+87. What is LangChain4j?
+88. How do Spring AI and LangChain4j differ?
+89. What is a chat client abstraction?
+90. What is a chat memory abstraction?
+91. How do you connect an embedding model to a vector store?
+92. What is model routing?
+93. How would you switch between different LLM providers?
+94. What is function calling or tool calling?
+95. How is tool calling different from generating plain text?
+96. How can an LLM invoke a Java business service through a tool?
+97. What is the Model Context Protocol (MCP)?
+98. How can an AI application connect to external tools using MCP?
+99. How do you version AI prompts and configurations?
+100. How would you select an AI framework for a large Java enterprise application?
+7. AI agents and agentic workflows
+Questions 101–115 · Advanced
+101. What is an AI agent?
+102. How is an AI agent different from a traditional chatbot?
+103. What is an agentic workflow?
+104. What is the difference between an agent and a fixed workflow?
+105. What is tool selection in an AI agent?
+106. What is planning and execution in an agent?
+107. How do you prevent an agent from entering an infinite loop?
+108. How do you limit the number of tool calls?
+109. How do you implement human approval before a sensitive action?
+110. How would you build an order-status agent using Java and Spring Boot?
+111. How should an agent handle tool failures?
+112. How do you maintain state across agent steps?
+113. How do you secure tools exposed to an AI agent?
+114. What are the risks of giving an agent unrestricted database access?
+115. When should you avoid using an AI agent and choose a normal workflow instead?
+8. AI in microservices architecture
+Questions 116–130 · Senior-level design
+116. How would you integrate an AI service into an existing microservices architecture?
+117. Should AI capabilities be implemented as a separate microservice?
+118. How would an API Gateway handle AI requests?
+119. How do you apply authentication and authorization to AI endpoints?
+120. How do you handle slow AI responses in a distributed system?
+121. How would you design circuit breakers for an LLM provider?
+122. How do you prevent retry storms during an AI provider outage?
+123. How would you implement asynchronous AI processing using Kafka?
+124. When should an AI request be processed synchronously versus asynchronously?
+125. How do you handle duplicate AI-processing messages?
+126. How do you maintain idempotency when AI operations trigger business actions?
+127. How do you propagate correlation IDs across AI-related services?
+128. How would you scale an AI microservice independently?
+129. How do you implement fallback behavior when the AI provider is unavailable?
+130. How do you prevent one AI workload from affecting other business APIs?
+9. Security, privacy, and responsible AI
+Questions 131–145 · High priority in enterprise interviews
+131. What are the major security risks of Generative AI?
+132. What is prompt injection, and how does it differ from SQL injection?
+133. How do you protect sensitive data sent to an LLM?
+134. How do you prevent secrets from appearing in prompts or logs?
+135. How do you handle personally identifiable information (PII)?
+136. How do you enforce access control in RAG?
+137. How do you protect against malicious content in retrieved documents?
+138. Why should LLM output never be treated as trusted executable code?
+139. How do you validate AI-generated SQL before execution?
+140. How do you prevent unauthorized tool execution?
+141. How do you manage AI provider API keys?
+142. How do you implement audit logging for AI interactions?
+143. What is data leakage in an AI system?
+144. How do you evaluate bias and harmful outputs?
+145. What governance controls would you require before releasing an AI feature to production?
+10. AI performance, reliability, and cost optimization
+Questions 146–160 · Production engineering
+146. What factors determine LLM response latency?
+147. What is the difference between time to first token and total response time?
+148. How do you reduce AI API latency?
+149. How do you manage concurrent requests to an LLM?
+150. How do you avoid exhausting Java thread pools?
+151. How do you implement rate limiting for expensive AI endpoints?
+152. How do you reduce token consumption?
+153. What are the trade-offs of using a smaller model?
+154. When should you cache AI responses?
+155. How do you design a semantic cache?
+156. What are the risks of caching personalized AI responses?
+157. How do you handle provider quotas and token limits?
+158. How do you monitor AI usage and cost per request?
+159. How do you design graceful degradation when AI is unavailable?
+160. What metrics would you monitor for an AI-enabled Spring Boot service?
+11. AI testing, evaluation, and observability
+Questions 161–175 · Advanced practical knowledge
+161. Why is testing AI applications different from testing traditional applications?
+162. How do you unit-test an AI service in Java?
+163. How do you mock an LLM provider in Spring Boot tests?
+164. How do you test prompts without depending on one exact response?
+165. What is an AI evaluation dataset?
+166. What is the difference between offline and online evaluation?
+167. How do you evaluate factual correctness?
+168. How do you measure retrieval precision and recall?
+169. What are faithfulness and groundedness in RAG evaluation?
+170. What is a regression test for an LLM application?
+171. How do you detect model-quality degradation after a model change?
+172. What should you log for an AI request?
+173. How do you trace a request through retrieval, model inference, and tools?
+174. How do you monitor hallucination rates and user feedback?
+175. How do you perform load testing for an AI-powered API?
+12. Fine-tuning, model selection, and deployment
+Questions 176–185 · Advanced
+176. What is fine-tuning?
+177. What is the difference between fine-tuning and RAG?
+178. When is prompt engineering sufficient?
+179. When would you choose fine-tuning over RAG?
+180. What is LoRA or parameter-efficient fine-tuning?
+181. What is quantization, and why is it useful?
+182. How do you compare model quality, latency, and cost?
+183. What is an AI model evaluation benchmark?
+184. How would you deploy a self-hosted model compared with using a hosted API?
+185. What operational challenges arise when hosting your own LLM?
+13. Real-world AI system design questions
+Questions 186–195 · 10-year experience level
+186. Design an AI chatbot for an enterprise knowledge base using Java and Spring Boot.
+187. Design an AI-based customer-support assistant that retrieves order information securely.
+188. Design an AI-powered log-analysis system for production incidents.
+189. Design a system that summarizes large PDF documents and answers questions about them.
+190. Design an AI code-review assistant for a Java development team.
+191. Design an AI service that processes thousands of documents asynchronously.
+192. Design a system that recommends products using business data and an LLM.
+193. Design a secure AI assistant for a banking application.
+194. Design a multi-provider AI platform with fallback, monitoring, and cost controls.
+195. How would you migrate an existing monolithic Java application to add AI capabilities without disrupting existing services?
+14. Senior developer, leadership, and project decisions
+Questions 196–200 · Technical leadership
+196. How would you convince management that an AI feature provides measurable business value?
+197. How do you decide whether a business problem actually needs Generative AI?
+198. How would you estimate the cost, timeline, and risks of an AI project?
+199. How would you review an AI solution proposed by a junior developer?
+200. What architecture, security, and operational criteria must be satisfied before approving an AI feature for production?

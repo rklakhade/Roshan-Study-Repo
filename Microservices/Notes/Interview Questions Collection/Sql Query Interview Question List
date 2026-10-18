@@ -1,0 +1,299 @@
+1. Basic SQL Logical Queries — Must Prepare
+Assume these tables for the questions below:
+Employee table
+emp_id	emp_name	salary	dept_id	manager_id
+101	Amit	80000	10	105
+102	Neha	60000	20	105
+103	Raj	90000	10	106
+104	Priya	60000	20	105
+105	Kiran	120000	10	NULL
+106	Meera	100000	10	NULL
+Department table
+dept_id	dept_name
+10	IT
+20	HR
+30	Finance
+
+1. Write a query to find employees whose salary is greater than 70,000.
+2. Find employees whose salary is between 50,000 and 90,000.
+3. Find employees whose names start with A.
+4. Find employees whose names end with a.
+5. Find employees whose salary is not equal to 60,000.
+6. Find the total number of employees.
+7. Find the maximum salary.
+8. Find the minimum salary.
+9. Find the average salary.
+10. Find the total salary paid by the company.
+11. Count employees in each department.
+12. Find departments having more than two employees.
+13. Find the highest salary in each department.
+14. Find the average salary in each department.
+15. Display employees in descending order of salary.
+2. Second-Highest and Nth-Highest Salary
+These are among the most important logical SQL interview topics.
+16. Find the second-highest salary.
+17. Find the third-highest salary.
+18. Find the Nth-highest distinct salary.
+19. Find the second-highest salary without using LIMIT or TOP.
+20. Find the second-highest salary using a subquery.
+21. Find the second-highest salary using a window function.
+22. Find the employee who earns the second-highest salary.
+23. Find all employees tied for the second-highest salary.
+24. Find the highest-paid employee in each department.
+25. Find the second-highest salary in each department.
+26. Find the top three highest-paid employees in each department.
+27. Find the employees earning more than the company's average salary.
+28. Find employees earning more than their department's average salary.
+29. Find the department with the highest average salary.
+30. Find the department with the second-highest average salary.
+3. SQL Joins — Very Important
+31. Display employee names along with their department names.
+32. Find employees who do not belong to any department.
+33. Find departments that have no employees.
+34. Display all departments, including those without employees.
+35. Find employees who earn more than their managers.
+36. Display each employee and their manager's name.
+37. Find employees who work in the same department as Amit.
+38. Find employees who earn the same salary as another employee.
+39. Find pairs of employees working in the same department.
+40. Find employees who have no manager.
+41. Find departments where every employee earns more than 50,000.
+42. Find departments where at least one employee earns more than 100,000.
+43. Explain the difference between INNER JOIN, LEFT JOIN, RIGHT JOIN, and FULL OUTER JOIN.
+44. What is the difference between a condition in the ON clause and one in the WHERE clause for an outer join?
+45. How can joining two one-to-many tables accidentally inflate aggregate totals?
+4. GROUP BY and HAVING
+46. Find departments with more than five employees.
+47. Find departments whose average salary exceeds 80,000.
+48. Find departments whose total salary exceeds 200,000.
+49. Count employees earning more than 70,000 in each department.
+50. Find departments having at least three employees with salary above 60,000.
+51. Find duplicate employee names.
+52. Find duplicate salary values.
+53. Find salary values shared by at least three employees.
+54. Find the department with the largest number of employees.
+55. Display the employee count and average salary for every department.
+56. Explain the difference between WHERE and HAVING.
+57. Can you use a column alias in HAVING? Does behavior vary by database?
+58. Find departments where the maximum salary is greater than twice the minimum salary.
+59. Find employees whose salary is equal to their department's average salary.
+60. Explain how NULL values affect COUNT(*), COUNT(column), SUM(), and AVG().
+5. Window Functions — Senior-Level SQL
+61. What is the difference between ROW_NUMBER(), RANK(), and DENSE_RANK()?
+62. Rank employees by salary from highest to lowest.
+63. Assign a separate salary rank within each department.
+64. Find the second-highest-paid employee in each department using DENSE_RANK().
+65. Find the top three distinct salary levels in each department.
+66. Find employees whose salary is above the department average using AVG() OVER().
+67. Calculate a running total of employee salaries.
+68. Calculate a running total of sales by date.
+69. Find the previous month's sales using LAG().
+70. Find the next month's sales using LEAD().
+71. Find the difference between an employee's salary and the previous salary in rank order.
+72. Find the highest salary and lowest salary alongside each employee's details.
+73. Calculate each employee's percentage contribution to the department's total salary.
+74. Find the first and last transaction for each customer.
+75. Find the top two products by sales within every category.
+6. Subqueries, EXISTS and Set Operations
+76. Find employees earning more than the overall average salary.
+77. Find employees earning more than the average salary of their department.
+78. Find departments that contain at least one employee using EXISTS.
+79. Find departments with no employees using NOT EXISTS.
+80. Find customers who have placed at least one order.
+81. Find customers who have never placed an order.
+82. Explain the difference between IN and EXISTS.
+83. Explain the difference between NOT IN and NOT EXISTS, particularly when NULL is present.
+84. Find employees whose salary is greater than every employee in the HR department.
+85. Find employees whose salary is greater than at least one employee in HR.
+86. Find records present in one table but missing from another.
+87. Explain the difference between UNION and UNION ALL.
+88. Find common records between two tables.
+89. Find records in the first table but not the second.
+90. What is a correlated subquery, and when would you use one?
+7. Duplicate Records and Data Cleaning
+Assume a Customer table with customer_id, email, and created_at.
+91. Find duplicate email addresses.
+92. Find all records belonging to duplicate email groups.
+93. Delete duplicate rows while retaining one record per email.
+94. Keep the most recently created record for each email and identify older duplicates.
+95. Find duplicate records based on a combination of name, email, and phone number.
+96. Find rows with missing email addresses.
+97. Replace NULL values with a default using COALESCE().
+98. Find employees whose salary is missing.
+99. Find records where leading or trailing spaces cause apparent duplicates.
+100. How would you prevent duplicates from being inserted concurrently?
+Interview tip: For deletion questions, first write a SELECT to verify exactly which rows would be removed. Use a transaction and appropriate backup or recovery safeguards before executing a production deletion.
+8. Date and Time Logical Queries
+101. Find employees hired in the last 30 days.
+102. Find employees hired in the current year.
+103. Find employees hired in the previous month.
+104. Count employees hired in each year.
+105. Find the earliest and latest hire dates.
+106. Find employees hired before their managers.
+107. Calculate employee tenure in years.
+108. Find orders placed on the same day.
+109. Find customers who placed multiple orders on the same date.
+110. Find gaps in a sequence of transaction dates.
+111. Find consecutive days on which a customer placed orders.
+112. Calculate month-over-month sales growth.
+113. Find the first transaction date for each customer.
+114. Find customers who made purchases in three consecutive months.
+115. How would you filter a date range efficiently without applying a function to an indexed date column?
+9. Real-World Business SQL Scenarios
+116. Find the top five customers by total purchase amount.
+117. Find customers whose total purchases exceed the average customer spending.
+118. Find products that have never been ordered.
+119. Find the best-selling product in each category.
+120. Find customers who purchased every product in a specified category.
+121. Find customers who ordered in January but not in February.
+122. Find customers who purchased the same product more than once.
+123. Find the latest order for each customer.
+124. Find orders whose payment status is still pending.
+125. Find orders where the order amount and payment amount do not match.
+126. Calculate daily, weekly, and monthly revenue.
+127. Find the percentage of cancelled orders.
+128. Identify customers whose spending increased compared with the previous month.
+129. Find products whose sales decreased for three consecutive months.
+130. Find the median salary or median order value.
+10. Advanced SQL Logical Questions
+131. What is a Common Table Expression (CTE)?
+132. What is a recursive CTE?
+133. How do you find employees in an organizational hierarchy?
+134. What is the difference between a CTE, derived table, and temporary table?
+135. What is a correlated subquery?
+136. How do you find gaps and islands in sequential data?
+137. How do you find consecutive login days for each user?
+138. How do you calculate a rolling seven-day average?
+139. How do you pivot rows into columns?
+140. How do you unpivot columns into rows?
+141. What is conditional aggregation using CASE WHEN?
+142. How do you calculate conversion rates using SQL?
+143. How do you identify overlapping date intervals?
+144. How do you find the longest streak of consecutive transactions?
+145. How do you deduplicate event records while keeping the latest event?
+146. How do you calculate cumulative percentages?
+147. How do you find percentile-based salary rankings?
+148. How do you compare two tables and find changed records?
+149. How do you implement pagination with stable ordering?
+150. How would you write a query to reconcile millions of payment and order records?
+11. SQL Performance and Production Troubleshooting
+151. Why is a SQL query slow even when an index exists?
+152. What is an execution plan?
+153. How do you interpret EXPLAIN in MySQL?
+154. What is the difference between a table scan and an index scan?
+155. When can an index make query performance worse?
+156. Why can functions on indexed columns prevent efficient index access?
+157. What is a composite index, and why does column order matter?
+158. What is a covering index?
+159. Why can SELECT * be inefficient?
+160. How do you optimize a query with multiple joins?
+161. Why can a join produce duplicate rows?
+162. What is the difference between filtering before aggregation and filtering after aggregation?
+163. How do indexes affect ORDER BY and GROUP BY?
+164. What is a deadlock, and how do you investigate one?
+165. What is the difference between optimistic and pessimistic locking?
+166. How do transaction isolation levels affect concurrent queries?
+167. What is a phantom read?
+168. How do you handle a query that locks too many rows?
+169. How would you troubleshoot database CPU usage reaching 100%?
+170. How would you optimize a report query that takes 10 minutes to run?
+12. Tricky SQL Questions Interviewers May Ask
+171. What is the logical processing order of a SQL query?
+172. Can WHERE filter an aggregate result directly?
+173. Can HAVING be used without GROUP BY?
+174. What is the difference between COUNT(*) and COUNT(DISTINCT column)?
+175. How does SQL handle comparisons with NULL?
+176. Why can NOT IN unexpectedly return no rows when a subquery contains NULL?
+177. Why does a LEFT JOIN behave like an inner join when a right-table condition is placed in WHERE?
+178. What happens when a scalar subquery returns multiple rows?
+179. How does DISTINCT interact with multiple selected columns?
+180. What is the difference between DELETE, TRUNCATE, and DROP?
+181. What is the difference between ROW_NUMBER() and DENSE_RANK() when salaries are tied?
+182. Why can LIMIT without ORDER BY return unpredictable rows?
+183. What happens when aggregate functions operate on empty input?
+184. How do CASE expressions handle NULL?
+185. How can integer division cause incorrect percentage calculations?
+
+Practice these 10 queries first
+These are especially useful for building confidence because they cover the patterns that appear repeatedly in logical SQL interviews.
+1
+
+Find the second-highest distinct salary.
+Salary ranking
+
+Show hint
+
+2
+
+Find employees earning more than their managers.
+Self join
+
+Show hint
+
+3
+
+Find duplicate email addresses.
+Aggregation
+
+Show hint
+
+4
+
+Find departments with no employees.
+Joins
+
+Show hint
+
+5
+
+Find the top three salaries in each department.
+Window functions
+
+Show hint
+
+6
+
+Find employees earning more than their department average.
+Aggregation
+
+Show hint
+
+7
+
+Find the latest order for each customer.
+Window functions
+
+Show hint
+
+8
+
+Find customers who never placed an order.
+Anti-join
+
+Show hint
+
+9
+
+Calculate running total of daily sales.
+Window functions
+
+Show hint
+
+10
+
+Find monthly sales growth percentage.
+Business analytics
+
+Show hint
+
+Recommended preparation strategy
+For a 10-year Java Developer interview, prioritize these topics in order:
+1. Second-highest and Nth-highest salary
+2. Joins, self joins, and missing records
+3. GROUP BY, HAVING, and aggregate functions
+4. ROW_NUMBER(), RANK(), DENSE_RANK(), and PARTITION BY
+5. Subqueries, EXISTS, and NOT EXISTS
+6. Duplicate detection and data cleanup
+7. Business scenarios involving orders, payments, and customers
+8. Indexes, execution plans, and query optimization
+One important point: SQL interview syntax varies by database. Since you're working with MySQL for your Java practice, we can use MySQL 8+ syntax for hands-on exercises, including window functions and CTEs.

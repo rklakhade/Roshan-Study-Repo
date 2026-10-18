@@ -1,0 +1,357 @@
+
+Java 8 Stream API: 100 Practical Interview Questions for 10 Years of Experience
+For a Senior Java Developer with 10 years of experience, interviewers expect you to solve real coding problems using Java 8 Streams, Lambda expressions, Functional Interfaces, Collectors, Optional, and Map operations.
+The focus is not just writing a one-line stream. You should explain the logic, handle duplicate and null values, consider performance, and know when a normal loop is better.
+I'll use simple Java examples with an Employee class, because employee-based problems are common in interviews.
+1. Employee class for practical questions
+Use this sample class for the exercises below.
+import java.util.*;
+
+class Employee {
+    private int id;
+    private String name;
+    private String department;
+    private double salary;
+    private int age;
+
+    public Employee(int id, String name,
+                    String department,
+                    double salary, int age) {
+        this.id = id;
+        this.name = name;
+        this.department = department;
+        this.salary = salary;
+        this.age = age;
+    }
+
+    public int getId() { return id; }
+    public String getName() { return name; }
+    public String getDepartment() { return department; }
+    public double getSalary() { return salary; }
+    public int getAge() { return age; }
+
+    @Override
+    public String toString() {
+        return name + " - " + department + " - " + salary;
+    }
+}
+
+
+Sample data:
+List<Employee> employees = Arrays.asList(
+    new Employee(101, "Amit", "IT", 80000, 30),
+    new Employee(102, "Neha", "HR", 60000, 28),
+    new Employee(103, "Raj", "IT", 90000, 35),
+    new Employee(104, "Priya", "HR", 70000, 32),
+    new Employee(105, "Vijay", "Finance", 75000, 29),
+    new Employee(106, "Sneha", "IT", 90000, 27),
+    new Employee(107, "Rahul", "Finance", 50000, 40)
+);
+
+
+2. Basic Stream coding questions
+These test your understanding of filter(), map(), sorted(), forEach(), and collect().
+1
+
+Find all employees whose salary is greater than 70,000.
+
+2
+
+Find employees who belong to the IT department.
+
+3
+
+Get only employee names from the employee list.
+
+4
+
+Convert all employee names to uppercase.
+
+5
+
+Find employees whose names start with 'A'.
+
+6
+
+Find employees whose age is greater than 30.
+
+7
+
+Sort employees by salary in ascending order.
+
+8
+
+Sort employees by salary in descending order.
+
+9
+
+Sort employees by name alphabetically.
+
+10
+
+Count the total number of employees.
+
+
+Example: Find employees earning more than 70,000.
+employees.stream()
+    .filter(e -> e.getSalary() > 70000)
+    .forEach(System.out::println);
+
+
+Explanation: stream() processes the collection, filter() selects matching employees, and forEach() prints the results.
+3. Highest salary, second-highest salary and ranking
+These are among the most frequently practiced interview problems.
+No.	Practical question
+11	Find the employee with the highest salary.
+12	Find the employee with the lowest salary.
+13	Find the second-highest distinct salary.
+14	Find the third-highest distinct salary.
+15	Find the Nth-highest distinct salary.
+16	Find the employee who earns the second-highest salary.
+17	Find all employees tied for the highest salary.
+18	Find the top three highest-paid employees.
+19	Find the top two employees in each department.
+20	Find employees whose salary is above the average salary.
+21	Find the average salary of all employees.
+22	Find the sum of all employee salaries.
+23	Find the maximum salary using mapToDouble().
+24	Find the second-lowest distinct salary.
+25	Find the employees earning more than 80,000 but less than 95,000.
+Example: Find the second-highest distinct salary
+OptionalDouble secondHighest = employees.stream()
+    .mapToDouble(Employee::getSalary)
+    .distinct()
+    .boxed()
+    .sorted(Comparator.reverseOrder())
+    .skip(1)
+    .mapToDouble(Double::doubleValue)
+    .findFirst();
+
+
+A simpler alternative using a list:
+List<Double> salaries = employees.stream()
+    .map(Employee::getSalary)
+    .distinct()
+    .sorted(Comparator.reverseOrder())
+    .collect(Collectors.toList());
+
+if (salaries.size() >= 2) {
+    System.out.println(salaries.get(1));
+}
+
+
+For production code, consider using BigDecimal for monetary values rather than double.
+4. Grouping and partitioning questions
+These questions are especially important for senior Java interviews because they test your ability to aggregate business data.
+No.	Practical question
+26	Group employees by department.
+27	Count employees in each department.
+28	Calculate average salary for each department.
+29	Find the highest salary in each department.
+30	Find the lowest salary in each department.
+31	Calculate total salary by department.
+32	Find the highest-paid employee in each department.
+33	Find the second-highest distinct salary in each department.
+34	Group employees by department and then by age.
+35	Partition employees into salary above and below 70,000.
+36	Group employee names by department.
+37	Find departments with more than two employees.
+38	Find the department with the highest average salary.
+39	Group employees by salary range.
+40	Create a Map of department name to employee count.
+Example: Count employees by department
+Map<String, Long> countByDepartment =
+    employees.stream()
+        .collect(Collectors.groupingBy(
+            Employee::getDepartment,
+            Collectors.counting()
+        ));
+
+System.out.println(countByDepartment);
+
+
+Expected result:
+{Finance=2, HR=2, IT=3}
+
+
+Example: Average salary by department
+Map<String, Double> averageSalary =
+    employees.stream()
+        .collect(Collectors.groupingBy(
+            Employee::getDepartment,
+            Collectors.averagingDouble(Employee::getSalary)
+        ));
+
+System.out.println(averageSalary);
+
+
+Example: Highest-paid employee in each department
+Map<String, Optional<Employee>> highestPaid =
+    employees.stream()
+        .collect(Collectors.groupingBy(
+            Employee::getDepartment,
+            Collectors.maxBy(
+                Comparator.comparingDouble(Employee::getSalary)
+            )
+        ));
+
+
+Notice that maxBy() returns an Optional<Employee> because a maximum may not exist for an empty input.
+5. Duplicate and frequency-based questions
+These are common logical coding exercises.
+No.	Practical question
+41	Find duplicate integers in a list.
+42	Find unique integers in a list.
+43	Count the frequency of each number.
+44	Find duplicate employee names.
+45	Find the first non-repeated character in a String.
+46	Find the first repeated character in a String.
+47	Count the frequency of each character in a String.
+48	Find duplicate words in a sentence.
+49	Find the most frequently occurring element.
+50	Find elements that occur more than twice.
+Example: Find duplicate numbers
+List<Integer> numbers =
+    Arrays.asList(10, 20, 10, 30, 20, 40, 50);
+
+Set<Integer> seen = new HashSet<>();
+
+Set<Integer> duplicates = numbers.stream()
+    .filter(n -> !seen.add(n))
+    .collect(Collectors.toSet());
+
+System.out.println(duplicates);
+
+
+Possible output:
+[20, 10]
+
+
+The order is not guaranteed because HashSet is unordered.
+Senior-level follow-up: Is this Stream pipeline safe with parallelStream()? No. It mutates a shared HashSet, which is not thread-safe. Prefer a grouping-based solution or a sequential stream.
+6. String-based Stream questions
+No.	Practical question
+51	Reverse a String using Java 8 features.
+52	Check whether a String is a palindrome.
+53	Find duplicate characters in a String.
+54	Find the first non-repeated character.
+55	Count vowels and consonants.
+56	Find the longest word in a sentence.
+57	Sort words alphabetically.
+58	Find the word with the maximum length.
+59	Count the number of words in a sentence.
+60	Check whether two Strings are anagrams.
+Example: Find the longest word
+String sentence = "Java Streams simplify data processing";
+
+Optional<String> longestWord =
+    Arrays.stream(sentence.split("\\s+"))
+        .max(Comparator.comparingInt(String::length));
+
+System.out.println(longestWord.orElse(""));
+
+
+Output:
+processing
+
+
+7. Map, Optional and Collectors questions
+No.	Practical question
+61	Convert a list of employees into a Map keyed by employee ID.
+62	Handle duplicate keys using Collectors.toMap().
+63	Convert a list of Strings into a comma-separated String.
+64	Join employee names using Collectors.joining().
+65	Find the first employee matching a condition.
+66	Use Optional to handle a missing employee.
+67	Explain orElse() versus orElseGet().
+68	Explain map() versus flatMap().
+69	Flatten a list of lists into one list.
+70	Convert a Map into a Stream and filter its entries.
+Example: Convert employees into a Map
+Map<Integer, Employee> employeeMap =
+    employees.stream()
+        .collect(Collectors.toMap(
+            Employee::getId,
+            Function.identity()
+        ));
+
+
+This assumes employee IDs are unique. If duplicate keys are possible, provide a merge function to decide which value to retain.
+Example: Flatten nested lists
+List<List<Integer>> nested =
+    Arrays.asList(
+        Arrays.asList(1, 2),
+        Arrays.asList(3, 4),
+        Arrays.asList(5, 6)
+    );
+
+List<Integer> flattened = nested.stream()
+    .flatMap(List::stream)
+    .collect(Collectors.toList());
+
+System.out.println(flattened);
+
+
+Output: [1, 2, 3, 4, 5, 6]
+8. Advanced Stream questions for senior developers
+No.	Practical question
+71	Find the top three salaries without sorting the entire list.
+72	Find the median salary.
+73	Find the top three employees by salary in each department.
+74	Calculate each department's percentage contribution to total salaries.
+75	Find employees whose salary matches the department's maximum salary.
+76	Compare two lists and find elements present only in one list.
+77	Merge two employee lists and remove duplicates based on employee ID.
+78	Find common elements between two lists.
+79	Sort by department, then salary descending, then name.
+80	Create a custom Collector.
+81. Explain lazy evaluation in Streams.
+82. What happens if a Stream is reused after a terminal operation?
+83. What is the difference between findFirst() and findAny()?
+84. What is the difference between reduce() and collect()?
+85. Why should side effects be avoided in Stream operations?
+86. When should you use mapToInt() or mapToDouble()?
+87. When can parallel streams improve performance?
+88. Why can parallel streams perform worse than sequential streams?
+89. How do you handle exceptions inside a Stream pipeline?
+90. How do you debug a complex Stream pipeline?
+9. Real-world enterprise coding scenarios
+These problems help demonstrate practical experience rather than just knowledge of Stream methods.
+91. From a list of orders, calculate total revenue for each customer.
+92. Find the top five customers by total order value.
+93. Group transactions by status and count each status.
+94. Find duplicate transactions based on transaction ID.
+95. Find the latest transaction for each customer.
+96. From a list of API logs, count errors by endpoint.
+97. Find the slowest API requests using response time.
+98. Group products by category and find the most expensive product in each category.
+99. Find employees whose salary is above their department's average.
+100. Process a large dataset while avoiding unnecessary intermediate collections.
+For senior-level answers, also discuss null handling, duplicate keys, data size, complexity, thread safety, and readability.
+
+Your Java 8 interview practice
+Rather than memorizing 100 solutions, practice writing them yourself. Start with these three questions.
+1
+
+Find the second-highest distinct salary using Java 8 Streams.
+Input salaries: 50000, 80000, 90000, 90000, 70000
+
+
+
+
+2
+
+Group employees by department and count employees in each department.
+
+
+
+
+3
+
+Find duplicate integers using Java 8 Streams.
+Input: [10, 20, 10, 30, 20, 40]
+
+
+
+Submit answers for evaluation
+My recommendation: Prioritize questions 13, 19, 26–33, 41–50, 61–70, and 73–90. These cover the Stream patterns you should be comfortable explaining and coding in a senior Java interview.

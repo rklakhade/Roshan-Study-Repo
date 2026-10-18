@@ -1,0 +1,393 @@
+HR Round Interview Questions for 10 Years of Experience — Java Full Stack Developer
+For a candidate with around 10 years of experience, HR discussions are not limited to basic questions like “Tell me about yourself.” Recruiters usually evaluate your communication, current and expected CTC, notice period, reason for switching, project experience, stability, location flexibility, and joining availability.
+I’ve organized the questions according to the complete job-switch journey: from applying for a job to receiving and negotiating an offer. The examples are tailored to an experienced Java Full Stack Developer in the Indian IT market.
+1. While applying for a job
+These questions may appear on job portals, application forms, or recruiter calls.
+No.	HR question
+1	How many years of total IT experience do you have?
+2	How many years of relevant Java experience do you have?
+3	How many years of experience do you have in Spring Boot?
+4	How many years of experience do you have in microservices?
+5	What is your current CTC?
+6	What is your expected CTC?
+7	What is your official notice period?
+8	What is your last working day, if you are serving notice?
+9	Are you currently serving notice period?
+10	What is your current employment status?
+11	Are you open to working from the office or in a hybrid model?
+12	Which locations are you comfortable working in?
+13	Are you comfortable with rotational or night shifts?
+14	Do you have any offers in hand?
+15	Why are you interested in this position?
+16	Are you comfortable with background verification?
+17	Do you have all your previous employment documents?
+18	Are you comfortable working as an individual contributor or a technical lead?
+19	What is your highest educational qualification?
+20	When can you attend the interview?
+Important: Keep your resume, employment dates, current CTC, notice period, and experience details consistent across job portals and recruiter calls.
+2. First HR/recruiter screening call
+This is often the first phone call after applying for a job.
+No.	Question
+21	Can you introduce yourself?
+22	Can you briefly explain your current role?
+23	What technologies are you currently working on?
+24	What are your key responsibilities?
+25	Are you working on a development project or a support project?
+26	Can you explain your current project in two minutes?
+27	How much hands-on coding experience do you have?
+28	Have you worked on microservices architecture?
+29	Have you worked on production issues?
+30	Have you interacted directly with clients?
+31	Have you mentored junior developers?
+32	Have you led a team or owned a module?
+33	Why are you looking for a job change?
+34	What are you looking for in your next role?
+35	Why should we consider you for this position?
+36	Are you actively looking for a job?
+37	How many interviews are you attending currently?
+38	Do you have any offers or ongoing interview processes?
+39	What is your availability for technical interviews?
+40	Is this a good time to discuss the opportunity?
+Sample answer: “Tell me about yourself”
+I am a Java Full Stack Developer with around 10 years of experience in software development. My primary skills include Core Java, Spring, Spring Boot, REST APIs, SQL, and enterprise application development.
+I have experience working on application development, debugging, defect resolution, and supporting business-critical applications. I also collaborate with cross-functional teams and contribute to understanding requirements and delivering solutions.
+I am now looking for an opportunity where I can use my experience, strengthen my skills in modern Java and microservices architecture, and take greater ownership of technical delivery.
+
+
+
+
+Adapt the answer to your actual hands-on experience and the technologies listed on your resume. Avoid claiming expertise in a technology you cannot explain in a technical interview.
+3. While scheduling an interview
+Recruiters may call or message you to coordinate the technical rounds.
+No.	HR question
+41	Are you available for an interview tomorrow?
+42	What time slots are convenient for you?
+43	Can you attend the interview today?
+44	Are you available for a video interview?
+45	Can you attend a face-to-face interview at our office?
+46	Can you attend multiple interview rounds on the same day?
+47	Are you comfortable with an online coding assessment?
+48	Can you share your updated resume before the interview?
+49	Can you confirm your email address and phone number?
+50	Have you received the interview invitation?
+51	Can you confirm your availability for the scheduled slot?
+52	Do you need to reschedule the interview?
+53	Why were you unable to attend the scheduled interview?
+54	Are you available for a discussion with the hiring manager?
+55	Can we schedule a discussion with HR after the technical rounds?
+Useful phrases for scheduling:
+- “Yes, I’m available tomorrow between 11 AM and 2 PM.”
+- “Could you please share the interview details and meeting link?”
+- “I’m sorry, I have a prior commitment at that time. Would it be possible to reschedule for tomorrow?”
+- “Thank you for scheduling the interview. I confirm my availability.”
+4. Questions about your current job and reason for switching
+These are especially important for experienced candidates.
+No.	HR question
+56	Why do you want to leave your current organization?
+57	Why are you looking for a change after working there for several years?
+58	Are you unhappy with your current company?
+59	Is salary the only reason for your job change?
+60	Are you facing any issues with your manager?
+61	Are you looking for a change because of your project?
+62	Is your current project ending?
+63	Are you on the bench?
+64	Have you been asked to leave your current project?
+65	Have you resigned already?
+66	Have you been asked to resign by your employer?
+67	Are you serving notice because of a personal decision or an organizational decision?
+68	Have you received negative performance feedback?
+69	What have you learned in your current organization?
+70	What would make you stay with your current employer?
+71	Have you discussed your career growth with your manager?
+72	What kind of work environment are you looking for?
+73	What do you expect from your next manager?
+74	What are your long-term career goals?
+75	Why do you think this is the right time to change jobs?
+Sample answer: “Why are you looking for a job change?”
+I’m looking for an opportunity that offers broader technical responsibilities, exposure to modern technologies, and opportunities for professional growth. With my experience in Java application development, I want to contribute to challenging projects, improve my skills in modern architecture, and take greater ownership of technical solutions.
+
+
+
+
+If your actual situation involves project release, restructuring, or performance feedback: Be truthful if asked directly. Explain the situation calmly, without blaming your manager or company, and describe the steps you are taking to improve.
+5. Current CTC, expected CTC, and salary negotiation
+This is one of the most important HR discussion areas. At your experience level, be ready to explain both your salary expectations and the value you bring.
+No.	HR question
+76	What is your current CTC?
+77	What is your fixed salary?
+78	What is your variable pay?
+79	What is your annual bonus?
+80	What is your monthly in-hand salary?
+81	What is your expected CTC?
+82	What percentage of hike are you expecting?
+83	Why are you expecting such a hike?
+84	Is your expectation negotiable?
+85	What is the minimum salary you would accept?
+86	Would you accept a 20% hike?
+87	If we offer a 30% hike, would you join?
+88	What if our budget is lower than your expectation?
+89	Would you consider a higher variable component?
+90	Are you comfortable with a joining bonus instead of a higher fixed salary?
+91	Do you have another offer with a higher salary?
+92	What is the highest offer you have received?
+93	Would you accept our offer if we matched your current expectation?
+94	Can you share your latest payslip?
+95	Can you share your CTC breakup or compensation letter?
+96	Do you have any retention bonus or unvested benefits?
+97	Would you take a lower salary for a better role?
+98	Is compensation your primary consideration?
+99	Can you justify your expected salary based on your skills?
+100	If we make an offer today, how soon can you confirm?
+Sample answer: “What is your current CTC?”
+My current annual CTC is approximately ₹19.07 lakh. I’m looking for a compensation package aligned with the role’s responsibilities, my experience, and the overall market range. I would be happy to discuss the complete compensation structure, including fixed pay, variable pay, and benefits.
+
+
+
+
+Sample answer: “What is your expected CTC?”
+Considering my experience, technical skills, and the responsibilities of this role, I’m looking for a competitive hike on my current compensation. I’m open to discussing a fair package based on the role, the fixed and variable components, and the overall growth opportunity.
+
+
+
+
+Sample answer: “What is the minimum salary you will accept?”
+I would prefer to evaluate the complete offer rather than decide only on the minimum CTC. My main considerations are the fixed compensation, role responsibilities, technical growth, and long-term opportunity. If the role and overall package are a good fit, I’m open to a reasonable discussion.
+
+
+
+
+Salary negotiation tip: Don't reveal your absolute minimum too early. First understand the company's budget, the fixed-versus-variable split, benefits, and role expectations. A higher headline CTC does not always mean higher take-home pay.
+6. Notice period and joining availability
+Recruiters often prioritize candidates who can join within the project's required timeline.
+No.	HR question
+101	What is your official notice period?
+102	Is your notice period 30, 60, or 90 days?
+103	Have you already resigned?
+104	What is your last working day?
+105	Can you negotiate an early release?
+106	Can your notice period be bought out?
+107	Does your company allow notice-period buyout?
+108	Can you join within 15 days?
+109	Can you join immediately?
+110	Would you be willing to use your earned leave to reduce your notice period?
+111	Can you provide written confirmation of your last working day?
+112	What if the client needs you to join earlier?
+113	Can you join before receiving your relieving letter?
+114	Are you available to join on our proposed date?
+115	Do you have any contractual obligations that could delay your joining?
+Useful phrases:
+- If you have a notice period: “My official notice period is 90 days. I can check whether an early release is possible, but I would prefer to confirm only after discussing it with my employer.”
+- If you are serving notice: “I’m currently serving my notice period, and my expected last working day is [date].”
+- If you can join immediately: “I’m available to join immediately, subject to completing the required documentation.”
+Never promise immediate joining unless you can genuinely meet that commitment.
+7. When you have multiple offers or ongoing interviews
+No.	HR question
+116	Do you have any offers in hand?
+117	Which companies have you interviewed with?
+118	What CTC have other companies offered you?
+119	Which company is your first preference?
+120	Have you received a written offer letter?
+121	What is the joining date mentioned in your other offer?
+122	Are you using our offer to negotiate with another company?
+123	If we offer you a better package, will you reject the other offer?
+124	What if your preferred company gives you a better offer later?
+125	Have you accepted another company's offer?
+126	Why should we make you an offer when you have other opportunities?
+127	Are you attending interviews only for a salary hike?
+128	Can you confirm that you will join if selected?
+129	Have you ever declined an offer after accepting it?
+130	What factors will determine your final decision?
+Sample answer: “Do you have any other offers?”
+I’m exploring suitable opportunities that align with my technical experience and career goals. I’ll evaluate each opportunity based on the role, technology stack, compensation, and growth prospects. I’ll communicate transparently if I receive an offer that affects my availability or decision timeline.
+
+
+
+
+If you do have an offer, answer honestly. Do not invent competing offers to negotiate a higher salary.
+8. Questions about your 10 years of experience and seniority
+For a senior developer, HR may check whether your experience matches the position's expectations.
+No.	HR question
+131	How would you describe your professional journey over the last 10 years?
+132	What are your strongest technical skills?
+133	What is your biggest professional achievement?
+134	Have you led a team or technical initiative?
+135	How many developers have you mentored?
+136	Have you handled critical production incidents?
+137	Have you communicated directly with clients or stakeholders?
+138	Have you worked in Agile or Scrum teams?
+139	Have you participated in requirement gathering?
+140	Have you contributed to design and architecture decisions?
+141	Have you reviewed code written by other developers?
+142	Have you helped junior developers resolve technical problems?
+143	Are you comfortable doing hands-on coding despite having 10 years of experience?
+144	Are you comfortable working as an individual contributor?
+145	Would you be comfortable reporting to someone with less experience?
+146	Do you prefer a technical lead role or a developer role?
+147	How do you handle tight deadlines?
+148	How do you prioritize multiple tasks?
+149	How do you keep your technical knowledge up to date?
+150	Why should we hire an experienced developer like you?
+Sample answer: “Why should we hire you?”
+I bring around 10 years of experience in software development, along with an understanding of enterprise applications, debugging, issue resolution, and team collaboration. I can contribute through hands-on development, problem-solving, and ownership of assigned deliverables. I’m also committed to continuously improving my skills and adapting to the technical requirements of the role.
+
+
+
+
+9. Behavioral and situational HR questions
+These assess how you work with people, manage pressure, and respond to challenges.
+No.	HR question
+151	What are your strengths?
+152	What is your biggest weakness?
+153	Tell me about a difficult situation at work.
+154	Tell me about a mistake you made and how you corrected it.
+155	Describe a disagreement with your manager.
+156	How do you handle conflicts with team members?
+157	What would you do if a colleague did not complete their work?
+158	How do you handle negative feedback?
+159	Tell me about a time you worked under pressure.
+160	What would you do if a production issue occurred near a deadline?
+161	How do you handle changing requirements?
+162	How would you respond if a stakeholder blamed your team unfairly?
+163	How do you handle multiple urgent tasks?
+164	What would you do if you disagreed with a technical decision?
+165	How do you handle a difficult client?
+166	How do you communicate delays to management?
+167	Have you ever failed to meet a deadline?
+168	How do you handle a task when you do not know the technology?
+169	How do you support a struggling junior developer?
+170	How do you maintain a positive working relationship with your manager?
+Tip: Prepare real examples using the STAR method:
+- S — Situation: What happened?
+- T — Task: What were you responsible for?
+- A — Action: What did you do?
+- R — Result: What improved or what did you learn?
+10. Questions about communication and client interaction
+No.	HR question
+171	Are you comfortable communicating in English?
+172	Have you attended international client calls?
+173	Have you worked with US or UK clients?
+174	How do you handle it when you don't understand a client's question?
+175	Are you comfortable presenting your work to senior management?
+176	Can you explain a technical issue in simple language?
+177	Have you prepared status reports or project updates?
+178	How do you communicate an unexpected delay?
+179	Are you comfortable participating in daily stand-up meetings?
+180	How would you explain a complex technical issue to a non-technical person?
+Useful phrase if you don't understand a question during a call:
+“Could you please repeat the question or rephrase it? I want to make sure I understand it correctly before answering.”
+
+This is professional. It is better to clarify than to guess.
+11. Education, employment history, and background verification
+No.	HR question
+181	What is your highest educational qualification?
+182	What was your year of graduation?
+183	Do you have any education gaps?
+184	Do you have any employment gaps?
+185	Can you explain the reason for any employment gap?
+186	Why did you change your previous companies?
+187	Have you worked as a permanent employee or on a contract?
+188	Can you explain your contract employment, if applicable?
+189	Are the employment dates on your resume accurate?
+190	Do you have experience letters from all previous employers?
+191	Can you provide relieving letters from your previous companies?
+192	Can you provide your salary slips and bank statements if required for verification?
+193	Is your name consistent across your employment and education documents?
+194	Have you ever had an issue during background verification?
+195	Are you comfortable with employment and education verification?
+Keep your documents organized, and disclose any genuine discrepancies before they become a problem. Never alter employment dates or salary documents.
+12. Company, work location, and work arrangements
+No.	HR question
+196	Why do you want to join our company?
+197	What do you know about our organization?
+198	Why are you interested in this particular role?
+199	What are you expecting from this position?
+200	Are you comfortable with work from office?
+201	Are you comfortable with a hybrid work model?
+202	Are you willing to relocate?
+203	Are you comfortable working from a client location?
+204	Are you comfortable working in shifts?
+205	Are you comfortable with occasional weekend work when required?
+206	Are you open to working with a different technology stack?
+207	Would you be comfortable with a support or maintenance role?
+208	Are you comfortable with a client-facing role?
+209	What type of team culture helps you perform best?
+210	What are your expectations regarding career progression?
+13. After the technical interview
+No.	HR question
+211	How was your technical interview?
+212	How confident are you about your performance?
+213	Which questions did you find challenging?
+214	Are you still interested in the position?
+215	Would you like to proceed with the next round?
+216	Are you available for a managerial or client round?
+217	Did the interviewer discuss the role and responsibilities?
+218	Are you comfortable with the technology stack discussed?
+219	Do you have any concerns about the position?
+220	If selected, how soon can you make a decision?
+Sample answer to “How was your interview?”
+The interview was good, and I appreciated the opportunity to discuss my experience. Some questions were challenging, but the discussion helped me understand the role better. I’m interested in moving forward with the process.
+
+
+
+
+14. Final HR round and offer discussion
+No.	HR question
+221	Are you happy with the role and responsibilities?
+222	Are you satisfied with the proposed compensation?
+223	Would you accept the offer if we issue it today?
+224	How much time do you need to review the offer?
+225	Do you have any concerns about the offer?
+226	What is your preferred joining date?
+227	Can you confirm your willingness to join?
+228	Are you interviewing with other companies at the final stage?
+229	What would make you decline our offer?
+230	Are you comfortable with the probation period and employment terms?
+231	Have you reviewed the variable-pay structure?
+232	Do you understand the benefits and deductions?
+233	Are you comfortable with the company's policies?
+234	Do you have any questions about the offer letter?
+235	Can you share the required documents for offer processing?
+15. Questions you should ask HR
+An interview is also your opportunity to evaluate the company. You can ask:
+No.	Question to ask HR
+236	Could you explain the role and key responsibilities?
+237	Is this a new position or a replacement for someone?
+238	What is the technology stack used by the team?
+239	Is the role primarily development, production support, or a mix of both?
+240	What are the expectations during the first three months?
+241	What is the team structure?
+242	Will this role involve direct client interaction?
+243	What is the work location and office attendance policy?
+244	Could you explain the fixed and variable components of the CTC?
+245	Are there any joining bonuses, retention conditions, or repayment clauses?
+246	What is the official notice period for this position?
+247	What are the next steps in the selection process?
+248	What is the expected timeline for feedback?
+249	What learning and career-growth opportunities are available?
+250	Is there anything else you need from me to complete the selection process?
+
+16. The 15 HR questions you should prepare first
+If your job switch is urgent, don't try to memorize all 250 questions at once. Start with these because they are commonly relevant throughout the hiring process.
+Your HR preparation checklist
+0 of 15
+
+
+
+[ ] Tell me about yourself.
+[ ] Why are you looking for a job change?
+[ ] What is your current CTC?
+[ ] What is your expected CTC?
+[ ] What is your official notice period?
+[ ] When can you join?
+[ ] Are you serving notice or available immediately?
+[ ] Do you have any offers in hand?
+[ ] Why should we hire you?
+[ ] What are your strengths and weaknesses?
+[ ] Explain your current project and responsibilities.
+[ ] Why do you want to join our company?
+[ ] How do you handle production issues and tight deadlines?
+[ ] Are you comfortable with the offered work location and work model?
+[ ] Do you have any questions for us?
+Copy all 15 questions
+17. Practice your HR round with me
+The best way to prepare is to practise answering one question at a time. I'll act as an HR recruiter, review your answer, correct your English, and suggest a professional answer suitable for a senior Java developer.
