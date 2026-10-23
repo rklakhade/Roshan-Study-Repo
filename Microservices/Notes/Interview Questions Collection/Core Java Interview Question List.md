@@ -12,8 +12,6 @@ Concurrency utilities, Garbage Collection, ClassLoaders, Generics, Design Princi
 Additional preparation
 Advanced language features, tricky output questions, coding problems, Java 17/21+ features.
 
-
-
 1. OOP Concepts and Java Fundamentals
 1. What are the four pillars of Object-Oriented Programming?
 2. What is the difference between abstraction and encapsulation?
@@ -51,6 +49,7 @@ Advanced language features, tricky output questions, coding problems, Java 17/21
 33. How do you find duplicate characters in a String?
 34. How do you find the first non-repeated character?
 35. How do you check whether two Strings are anagrams?
+
 3. Collections Framework — Very Important
 36. Explain the Java Collections Framework hierarchy.
 37. What is the difference between Collection and Collections?
@@ -77,6 +76,7 @@ Advanced language features, tricky output questions, coding problems, Java 17/21
 58. What is the difference between PriorityQueue and TreeSet?
 59. What is the time complexity of common HashMap operations?
 60. How would you choose a collection for a high-performance application?
+
 4. Java 8 Features and Streams API
 61. What are the major features introduced in Java 8?
 62. What is a functional interface?
@@ -103,6 +103,7 @@ Advanced language features, tricky output questions, coding problems, Java 17/21
 83. When should you avoid parallel streams?
 84. Why should you avoid modifying shared mutable state inside a stream?
 85. How do you optimize a complex Stream pipeline?
+
 5. Exception Handling
 86. What is the difference between checked and unchecked exceptions?
 87. What is the difference between Exception and Error?
@@ -119,6 +120,7 @@ Advanced language features, tricky output questions, coding problems, Java 17/21
 98. What are suppressed exceptions?
 99. What are best practices for exception handling in enterprise applications?
 100. Why should exceptions not be swallowed or used for normal control flow?
+
 6. Multithreading and Concurrency — Critical for Senior Roles
 101. What is the difference between a process and a thread?
 102. What are the different states in a Java thread lifecycle?
@@ -150,6 +152,7 @@ Advanced language features, tricky output questions, coding problems, Java 17/21
 128. How do you make a shared counter thread-safe?
 129. How do you implement producer-consumer using BlockingQueue?
 130. How would you investigate a production thread dump showing many blocked threads?
+
 7. JVM Internals and Memory Management
 131. Explain the major components of JVM architecture.
 132. What is the difference between JDK, JRE, and JVM?
@@ -171,6 +174,7 @@ Advanced language features, tricky output questions, coding problems, Java 17/21
 148. What is escape analysis?
 149. How do you investigate frequent GC pauses?
 150. How would you troubleshoot OutOfMemoryError: Java heap space in production?
+
 8. Generics, Reflection, Annotations and Serialization
 151. What are Generics in Java?
 152. What are bounded type parameters?
@@ -187,6 +191,7 @@ Advanced language features, tricky output questions, coding problems, Java 17/21
 163. Why is native Java serialization often avoided in modern service APIs?
 164. What is the difference between JSON serialization and Java object serialization?
 165. How do you handle serialization compatibility between application versions?
+
 9. Java 11, 17, 21 and Modern Java Features
 166. What are the important features introduced in Java 11?
 167. What are the important features introduced in Java 17?
@@ -203,6 +208,8 @@ Advanced language features, tricky output questions, coding problems, Java 17/21
 178. What is the Foreign Function and Memory API?
 179. What is the difference between a record and a traditional POJO?
 180. How would you plan a Java 8 to Java 21 migration?
+
+
 10. Coding Questions for 10 Years of Experience
 181. Find the second-highest number in an array.
 182. Find duplicate elements in a list.
@@ -224,6 +231,7 @@ Advanced language features, tricky output questions, coding problems, Java 17/21
 198. Merge two sorted arrays.
 199. Implement a thread-safe Singleton.
 200. Implement an LRU cache using Java collections.
+
 11. Tricky Output-Based Questions
 201. What is the output when a static variable is modified through an object?
 202. What happens when an overridden method is called from a constructor?
@@ -240,6 +248,7 @@ Advanced language features, tricky output questions, coding problems, Java 17/21
 213. Can a stream be reused?
 214. What happens when parallelStream() modifies a shared ArrayList?
 215. What happens when a CompletableFuture completes exceptionally?
+
 12. Design Principles and Design Patterns
 216. Explain the SOLID principles with Java examples.
 217. What is the Single Responsibility Principle?
@@ -256,6 +265,7 @@ Advanced language features, tricky output questions, coding problems, Java 17/21
 228. What is the Adapter pattern?
 229. How do you implement Singleton safely in Java?
 230. How do you choose an appropriate design pattern for a real requirement?
+
 13. Production Scenarios and Performance Optimization
 231. An application has high CPU usage. How do you investigate it?
 232. An application experiences frequent Garbage Collection pauses. How do you diagnose the cause?
@@ -289,5 +299,7 @@ Day 4	Multithreading and concurrency
 Day 5	JVM, memory management and Garbage Collection
 Day 6	Exceptions, Generics, modern Java and design patterns
 Day 7	Production scenarios and mock interview
-My recommendation: Do not try to memorize all 250 questions. Prepare the top 50 deeply, practice coding daily, and explain your answers as if speaking to a senior interviewer.
+
+My recommendation: Do not try to memorize all 250 questions. 
+Prepare the top 50 deeply, practice coding daily, and explain your answers as if speaking to a senior interviewer.
 We can also conduct a Core Java mock interview for a 10-year experienced candidate: I'll ask one question at a time, evaluate your answer, explain missing points, and move to the next question. This will help you practice both technical knowledge and interview communication.

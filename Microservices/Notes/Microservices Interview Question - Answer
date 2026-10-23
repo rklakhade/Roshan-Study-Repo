@@ -1217,7 +1217,7 @@ Spring Boot is a Java framework that makes it easier and faster to build standal
 In simple words, Spring Boot handles much of the setup work, so developers can focus on writing business logic instead of configuring everything manually.
 For example, we can use Spring Boot to build an Order Service that creates orders, retrieves order details, and communicates with other microservices.
 
-![alt text](../images/image-15.png)
+![alt text]ages/(../imimage-15.png)
 
 Important: Spring Boot is built on top of the Spring Framework. It does not replace Spring; it simplifies working with it.
 2. Why is Spring Boot commonly used for microservices?

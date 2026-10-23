@@ -1,3 +1,5 @@
+CTRL + Shift +  V for read  feature
+
 
 Routing: Forward requests to the correct microservice.
 JWT security: Validate access tokens before allowing protected requests.

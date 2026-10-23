@@ -1,0 +1,23 @@
+
+I am working on the eShare Admin project for HSBC through LTIMindtree.
+
+eShare Admin is an enterprise document management system used to manage business documents, folder structures, user access, approvals, and audit activities.
+
+The application has two major parts. The first is eShare Admin, a web-based application used by administrators and authorized users to create and manage folders, add members, configure permissions, and assign approvers and backup approvers.
+
+The second is the eShare client, which integrates with Windows Explorer and allows authorized users to access the configured folders and manage documents.
+
+The system supports document operations such as check-in, check-out, and cancel check-out. It also maintains audit information about activities performed on folders and documents, which helps with traceability and accountability.
+
+Different folder types, such as Deal, Team, Legal, Matter, and ISV, support different business requirements.
+
+From a business perspective, the system helps organizations manage document access in a controlled manner, maintain document history and accountability, and support collaboration between authorized users.
+
+
+6. Which modern technologies fit this project?
+![alt text](../images/image16.png)
+
+
+What these annotations actually do
+Annotation	Practical purpose
+@NotNull	Rejects a missing value

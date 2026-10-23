@@ -1,0 +1,14 @@
+
+=========================================================================================================================
+
+# 1. What are the four pillars of Object-Oriented Programming?
+
+Encapsulation — Protecting data.  -> Access modifiers, methods
+Abstraction — Hiding implementation details.  ->Interfaces, abstract classes
+Inheritance — Reusing code from another class. ->extends
+Polymorphism — One method or interface, different behaviors. -Overloading, overriding
+
+# 2. What is the difference between abstraction and encapsulation?
+
+ 
+
