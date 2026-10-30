@@ -6508,40 +6508,1360 @@ Map<String, Integer> totals = entries.stream()
 
 Interview answer: I handle duplicate keys by providing a merge function to Collectors.toMap(). The function defines whether to keep the existing value, keep the new value, or combine both values. The correct strategy depends on the business rule.
 =========================================================================================================================
+82. What is a parallel stream?
+A parallel stream can process portions of a data source concurrently using multiple threads.
 
-=========================================================================================================================
+Example:
+List<Integer> numbers =
+        Arrays.asList(10, 20, 30, 40, 50);
 
-=========================================================================================================================
+int total = numbers.parallelStream()
+        .mapToInt(Integer::intValue)
+        .sum();
 
-=========================================================================================================================
+System.out.println(total);
 
-=========================================================================================================================
 
-=========================================================================================================================
+Output:
+150
 
-=========================================================================================================================
 
-=========================================================================================================================
+The result is the same as the sequential sum, but the processing may be split across multiple tasks.
 
-=========================================================================================================================
+Parallel streams commonly use the shared Fork/Join common pool. Parallel execution is not guaranteed to be faster.
 
-=========================================================================================================================
+Interview answer: A parallel stream processes data using parallel tasks, often through the Fork/Join framework. It can improve performance for sufficiently large, CPU-intensive workloads when operations can be performed independently and the overhead of parallelization is justified.
+83. When should you avoid parallel streams?
+Avoid parallel streams when their overhead or concurrency behavior is likely to outweigh the benefits.
 
-=========================================================================================================================
+Common situations:
+- Small collections: Splitting tasks can cost more than the work itself.
+- Blocking operations: Network calls and database operations can occupy worker threads.
+- Shared mutable state: Multiple threads may update the same object incorrectly.
+- Order-sensitive logic: Maintaining order may limit parallel performance.
+- Heavy synchronization: Threads may spend more time waiting than working.
+- Already parallelized workloads: Additional parallelism can create contention for CPU and thread resources.
+Spring Boot example: Avoid casually converting a loop of external API calls into a parallel stream. It can increase resource contention and complicate timeout and concurrency control.
 
-=========================================================================================================================
+Interview answer: I avoid parallel streams for small data sets, blocking I/O, stateful operations, and workloads with substantial synchronization. I benchmark realistic workloads before choosing parallel processing.
+84. Why should you avoid modifying shared mutable state inside a Stream?
+Because multiple threads or operations can interfere with each other and produce incorrect results.
+Incorrect example
+List<Integer> numbers =
+        IntStream.rangeClosed(1, 1000)
+                .boxed()
+                .collect(Collectors.toList());
 
-=========================================================================================================================
+List<Integer> results = new ArrayList<>();
 
-=========================================================================================================================
+numbers.parallelStream()
+        .forEach(results::add);
 
-=========================================================================================================================
 
-=========================================================================================================================
+This is unsafe because several threads can modify the same ArrayList concurrently.
+Better approach
+List<Integer> results = numbers.parallelStream()
+        .map(n -> n * 2)
+        .collect(Collectors.toList());
 
-=========================================================================================================================
 
+The collector is designed to accumulate results safely when used according to its characteristics. It coordinates parallel accumulation instead of having every worker directly mutate one shared ArrayList.
+
+Interview answer: I avoid shared mutable state in stream operations because concurrent modifications can cause data races, lost updates, and inconsistent results. I prefer stateless transformations and built-in collectors, or appropriate concurrency mechanisms when mutation is necessary.
+85. How do you optimize a complex Stream pipeline?
+Remember this simple rule:
+
+Measure first, then reduce unnecessary work and allocations.
+
+Consider these practical steps:
+1. Filter early: Reduce the number of elements before expensive transformations when possible.
+2. Avoid repeated traversals: Combine operations into a pipeline if doing so improves readability and avoids repeated processing.
+3. Use efficient data structures: Choose lists, sets, or maps according to the operation required.
+4. Avoid side effects: Keep intermediate operations simple and stateless.
+5. Use primitive streams where appropriate: IntStream, LongStream, and DoubleStream can avoid unnecessary boxing.
+6. Use parallel streams only after measurement: Verify that the workload is large enough and parallelizable.
+7. Benchmark realistically: Use production-like data and tools such as JMH for microbenchmarks.
+Example
+Less efficient approach:
+List<Integer> numbers =
+        Arrays.asList(10, 15, 20, 25, 30, 35);
+
+List<Integer> filtered = numbers.stream()
+        .collect(Collectors.toList());
+
+List<Integer> result = filtered.stream()
+        .filter(n -> n > 20)
+        .map(n -> n * 2)
+        .collect(Collectors.toList());
+
+
+Simpler pipeline:
+List<Integer> result = numbers.stream()
+        .filter(n -> n > 20)
+        .map(n -> n * 2)
+        .collect(Collectors.toList());
+
+
+The second version avoids an unnecessary intermediate list and stream traversal.
+
+Important: A shorter pipeline is not always faster. The right optimization depends on the actual bottleneck.
+
+Interview-ready answer:
+I optimize Stream pipelines by measuring their performance first, filtering unnecessary elements early, avoiding repeated traversal and intermediate collections, and minimizing allocations and side effects. For numeric processing, I consider primitive streams to reduce boxing. I use parallel streams only when the workload is sufficiently large and independent, and I benchmark the solution with realistic data before applying it in production.
 =========================================================================================================================
+Final revision sheet
+Question	One-line memory aid
+61. Java 8 features	Lambdas, Streams, Optional, method references, Date/Time
+62. Functional interface	Exactly one abstract method
+63. @FunctionalInterface	Compile-time intent check
+64. Lambda	Short implementation of a functional interface
+65. Lambda vs anonymous class	Syntax and this behavior differ
+66. Method references	Existing method referenced using ::
+67. Stream API	Declarative data processing
+68. Collection vs Stream	Container vs processing pipeline
+69. Intermediate vs terminal	Transform vs execute
+70. map() vs flatMap()	Transform vs flatten
+71. filter() vs map()	Select vs transform
+72. findFirst() vs findAny()	First in encounter order vs any match
+73. orElse() vs orElseGet()	Eager fallback vs lazy supplier
+74. Optional	Represent potentially absent values
+75. reduce() vs collect()	Combine into a result vs accumulate a result
+76. groupingBy() vs partitioningBy()	Multiple groups vs two boolean groups
+77. Duplicate elements	Track or count frequencies
+78. Second-highest salary	Distinct, descending sort, skip one
+79. Group departments	Collectors.groupingBy()
+80. List to Map	Collectors.toMap()
+81. Duplicate map keys	Supply a merge function
+82. Parallel stream	Concurrent processing of stream elements
+83. Avoid parallel streams	Small, blocking, or contention-heavy work
+84. Shared mutable state	Risk of data races and inconsistent results
+85. Stream optimization	Measure, simplify, reduce allocations
+
+Java 8 compatibility note: The Stream examples above use Arrays.asList() and Collectors.toList() where needed. List.of() was introduced in Java 9, and Stream.toList() was introduced in Java 16, so use Java 8-compatible alternatives when preparing specifically for Java 8 interviews.
+=========================================================================================================================
+86. What is the difference between checked and unchecked exceptions?
+Remember:
+- Checked exception → The compiler requires you to catch it or declare it.
+- Unchecked exception → The compiler does not require you to catch or declare it.
+A. Checked exception
+Example: Reading a file can fail because the file does not exist.
+import java.io.FileReader;
+import java.io.IOException;
+
+class Main {
+    public static void main(String[] args) {
+        try {
+            FileReader reader =
+                    new FileReader("data.txt");
+            reader.close();
+        } catch (IOException e) {
+            System.out.println("File error");
+        }
+    }
+}
+
+
+The compiler requires IOException to be caught or declared.
+
+Other examples: SQLException, ClassNotFoundException.
+B. Unchecked exception
+int result = 10 / 0;
+
+
+This throws ArithmeticException at runtime. The compiler does not require a try-catch block.
+
+Other examples: NullPointerException, IllegalArgumentException, IndexOutOfBoundsException.
+![alt text](image-17.png)
+=========================================================================================================================
+87. What is the difference between Exception and Error?
+Both are subclasses of Throwable, but they represent different kinds of problems.
+- Exception → A condition an application may be able to handle.
+- Error → A serious problem usually related to the JVM or runtime environment.
+Exception example
+try {
+    int result = 10 / 0;
+} catch (ArithmeticException e) {
+    System.out.println("Cannot divide by zero");
+}
+
+
+The application can catch and handle this exception.
+Error example
+public class Main {
+    public static void main(String[] args) {
+        causeError();
+    }
+
+    static void causeError() {
+        causeError();
+    }
+}
+
+
+This causes repeated recursion until a StackOverflowError occurs.
+
+Error conditions generally should not be handled like ordinary business exceptions. Some errors can technically be caught, but recovery is often unsafe or impractical.
+![alt text](image-18.png)
+=========================================================================================================================
+88. What is the difference between throw and throws?
+Remember:
+- throw → Actually throws an exception object.
+- throws → Declares possible exceptions in a method signature.
+A. throw
+if (age < 18) {
+    throw new IllegalArgumentException(
+            "Age must be 18 or above");
+}
+
+
+Here, the code explicitly throws an exception.
+B. throws
+import java.io.IOException;
+
+void readFile() throws IOException {
+    // File reading logic
+}
+
+
+Here, the method declares that an IOException may propagate to the caller.
+throw	throws
+Used to throw an exception	Used in the method declaration
+Followed by an exception object	Followed by exception class names
+Used inside a method or other executable block	Used in a method or constructor signature
+
+Interview answer: throw is used to explicitly throw an exception, whereas throws declares exceptions that a method may pass to its caller.
+=========================================================================================================================
+89. Can a try block exist without a catch block?
+Yes. A try block can exist without catch if it has a finally block. A try-with-resources statement can also stand alone without either catch or finally.
+Example: try-finally
+try {
+    System.out.println("Inside try");
+} finally {
+    System.out.println("Inside finally");
+}
+
+
+Output:
+Inside try
+Inside finally
+
+
+The finally block executes after the try block under normal control flow.
+
+However, an ordinary try block cannot appear alone without either catch or finally.
+
+Interview answer: Yes, a try block can exist without catch when it is followed by finally. Try-with-resources can also be used without catch or finally.
+=========================================================================================================================
+90. Can multiple catch blocks be used?
+Yes. You can use multiple catch blocks to handle different exception types differently.
+try {
+    int result = 10 / 0;
+} catch (ArithmeticException e) {
+    System.out.println("Arithmetic problem");
+} catch (Exception e) {
+    System.out.println("General problem");
+}
+
+
+Output:
+Arithmetic problem
+
+
+Important rule: Put more specific exception types before their more general parent types. Otherwise, a later catch block may be unreachable and cause a compilation error.
+
+Java also supports multi-catch:
+catch (IOException | SQLException e) {
+    System.out.println("Operation failed");
+}
+
+
+The alternatives in a multi-catch must not be related by subclassing.
+
+Interview answer: Multiple catch blocks allow different exception types to be handled separately. Specific exceptions should be caught before general exceptions.
+=========================================================================================================================
+91. What happens if both try and finally contain a return statement?
+The return inside finally overrides the return from try.
+
+Example:
+static int test() {
+    try {
+        return 10;
+    } finally {
+        return 20;
+    }
+}
+
+
+Calling test() returns:
+20
+
+
+Why? The finally block executes before the method completes and its return value takes precedence.
+
+Important: Avoid returning from finally. It can hide exceptions and make code difficult to understand.
+
+If finally throws an exception instead, that exception can replace an exception or return that was already in progress.
+
+Interview answer: If both try and finally return values, the return from finally overrides the return from try. This practice should be avoided because it can hide exceptions and make control flow confusing.
+=========================================================================================================================
+92. What is try-with-resources?
+Try-with-resources is a Java feature that automatically closes resources when the try block finishes.
+
+It is useful for files, streams, database connections, and other resources that implement AutoCloseable. 
+
+Oracle Docs
+
+
+
+Example
+import java.io.BufferedReader;
+import java.io.FileReader;
+import java.io.IOException;
+
+public class Main {
+    public static void main(String[] args) {
+        try (BufferedReader reader =
+                     new BufferedReader(
+                             new FileReader("data.txt"))) {
+
+            System.out.println(reader.readLine());
+
+        } catch (IOException e) {
+            System.out.println("Unable to read file");
+        }
+    }
+}
+
+
+Java automatically closes the BufferedReader when the try block exits, whether normally or because an exception occurs.
+
+With multiple resources, Java closes them in reverse order of initialization.
+
+Interview answer: Try-with-resources automatically closes resources implementing AutoCloseable. It reduces boilerplate and helps prevent resource leaks.
+=========================================================================================================================
+93. What is the AutoCloseable interface?
+AutoCloseable is a Java interface that represents a resource that can be closed.
+
+It defines the close() method.
+Example
+class MyResource implements AutoCloseable {
+
+    @Override
+    public void close() {
+        System.out.println("Resource closed");
+    }
+}
+
+
+Use it with try-with-resources:
+try (MyResource resource = new MyResource()) {
+    System.out.println("Using resource");
+}
+
+
+Output:
+Using resource
+Resource closed
+
+
+The close() method runs automatically when execution leaves the try block.
+
+Interview answer: AutoCloseable provides the close() contract for resources and enables automatic resource management using try-with-resources.
+=========================================================================================================================
+94. How do you create a custom checked exception?
+Create a class that extends Exception.
+class InvalidEmployeeException extends Exception {
+
+    InvalidEmployeeException(String message) {
+        super(message);
+    }
+}
+
+
+Use it:
+static void validateEmployee(int age)
+        throws InvalidEmployeeException {
+
+    if (age < 18) {
+        throw new InvalidEmployeeException(
+                "Employee age must be at least 18");
+    }
+}
+
+
+Because it is a checked exception, callers must catch it or declare it.
+
+Interview answer: I create a custom checked exception by extending Exception and providing constructors that pass messages or causes to the superclass.
+=========================================================================================================================
+95. How do you create a custom unchecked exception?
+Create a class that extends RuntimeException.
+class ProductNotFoundException
+        extends RuntimeException {
+
+    ProductNotFoundException(String message) {
+        super(message);
+    }
+}
+
+
+Use it:
+throw new ProductNotFoundException(
+        "Product with ID 101 was not found");
+
+
+You do not have to catch or declare this exception.
+
+In Spring Boot, custom unchecked exceptions are commonly handled by @ControllerAdvice and @ExceptionHandler to return appropriate API error responses.
+
+Interview answer: I create an unchecked exception by extending RuntimeException. It does not require callers to catch or declare it, and it can represent an application error such as a product not being found.
+=========================================================================================================================
+96. What is exception propagation?
+Exception propagation means an exception travels up the method-call chain until a matching handler catches it.
+Example
+static void methodC() {
+    int result = 10 / 0;
+}
+
+static void methodB() {
+    methodC();
+}
+
+static void methodA() {
+    try {
+        methodB();
+    } catch (ArithmeticException e) {
+        System.out.println("Exception handled in methodA");
+    }
+}
+
+
+When methodC() throws an exception:
+1. methodC() does not handle it.
+2. The exception propagates to methodB().
+3. methodB() does not handle it.
+4. It reaches methodA(), where it is caught.
+Interview answer: Exception propagation is the process by which an exception travels up the call stack until it is handled by a matching catch block or remains uncaught.
+=========================================================================================================================
+97. What is the difference between final, finally, and finalize() in exception-related discussions?
+These names are similar but have completely different purposes.
+Term	Purpose
+final	Restricts reassignment, inheritance, or overriding depending on where it is used
+finally	Provides a block for cleanup after try/catch execution
+finalize()	Legacy garbage-collection-related method
+
+Example:
+final int number = 10;
+
+
+The variable cannot be reassigned.
+try {
+    System.out.println("Work");
+} finally {
+    System.out.println("Cleanup");
+}
+
+
+The finally block runs during normal completion of this example's control flow.
+
+finalize() historically allowed cleanup before an object was reclaimed by garbage collection, but its execution was never guaranteed promptly. In Java SE 26, it remains deprecated for removal, and Oracle recommends alternative cleanup mechanisms. 
+
+Oracle Docs
++1
+
+
+
+
+Interview answer: final is a keyword for restricting changes, finally is used for cleanup in exception handling, and finalize() is a deprecated legacy method associated with garbage collection. They are unrelated concepts despite their similar names.
+=========================================================================================================================
+98. What are suppressed exceptions?
+Suppressed exceptions are additional exceptions that occur while another exception is already being thrown.
+
+They commonly appear with try-with-resources.
+Example
+import java.io.IOException;
+
+class MyResource implements AutoCloseable {
+    @Override
+    public void close() throws IOException {
+        throw new IOException("Close failed");
+    }
+}
+
+public class Main {
+    public static void main(String[] args) {
+
+        try (MyResource resource = new MyResource()) {
+            throw new IOException("Processing failed");
+
+        } catch (IOException e) {
+            System.out.println(e.getMessage());
+
+            for (Throwable suppressed : e.getSuppressed()) {
+                System.out.println(suppressed.getMessage());
+            }
+        }
+    }
+}
+
+
+Output:
+Processing failed
+Close failed
+
+
+Why?
+1. The try block throws "Processing failed".
+2. Java attempts to close the resource.
+3. The close() method throws "Close failed".
+4. The original processing exception stays primary.
+5. The closing exception is attached as a suppressed exception.
+You can access suppressed exceptions with getSuppressed(). 
+
+Oracle Docs
+
+
+
+
+Interview answer: Suppressed exceptions are secondary exceptions attached to a primary exception. In try-with-resources, if the try block throws an exception and closing a resource also throws one, the closing exception is suppressed so that the original failure remains available.
+=========================================================================================================================
+99. What are best practices for exception handling in enterprise applications?
+Remember these practical rules:
+1. Catch exceptions only when you can handle them meaningfully. Avoid catch blocks that do nothing.
+2. Use specific exception types. Catch IOException or a relevant custom exception instead of broadly catching Exception everywhere.
+3. Preserve the original cause. When wrapping an exception, pass the original cause to the new exception.
+4. Use custom exceptions for meaningful business failures. Examples include ProductNotFoundException or InvalidOrderException.
+5. Use global handling in Spring Boot. @ControllerAdvice and @ExceptionHandler help convert exceptions into consistent API error responses.
+6. Release resources reliably. Prefer try-with-resources for AutoCloseable resources.
+7. Log useful context without exposing secrets. Include identifiers and relevant diagnostic information while protecting sensitive data.
+8. Avoid logging and rethrowing the same exception at every layer. This can create duplicate logs.
+9. Do not use exceptions for ordinary business decisions. Use normal conditions where appropriate.
+10. Preserve interrupts. If interrupted code catches InterruptedException but cannot rethrow it, it should generally restore the interrupt status with Thread.currentThread().interrupt().
+Interview answer: I use meaningful exception types, catch errors at the appropriate layer, preserve root causes, centralize REST exception handling where appropriate, avoid swallowing or repeatedly logging exceptions, and ensure that resources are closed reliably.
+=========================================================================================================================
+100. Why should exceptions not be swallowed or used for normal control flow?
+A. What does swallowing an exception mean?
+It means catching an exception and ignoring it without handling it, logging it appropriately, or propagating it.
+
+Incorrect example:
+try {
+    processPayment();
+} catch (Exception e) {
+    // Do nothing
+}
+
+
+If payment processing fails, the application may continue as though everything succeeded.
+
+Better:
+try {
+    processPayment();
+} catch (PaymentException e) {
+    logger.error("Payment processing failed", e);
+    throw e;
+}
+
+
+This is only an example: the appropriate action might be to return a failure response or apply a retry policy, depending on the situation.
+B. Why not use exceptions for normal control flow?
+Incorrect approach:
+try {
+    int number = Integer.parseInt(input);
+} catch (NumberFormatException e) {
+    // Treat every invalid input as a normal decision
+}
+
+
+If you expect invalid user input routinely, validate the input before parsing where practical. Exceptions should primarily represent exceptional or failed operations, not ordinary branching.
+Main reasons to avoid these practices
+- Errors become difficult to detect.
+- Application state may become inconsistent.
+- Debugging and monitoring become harder.
+- Exceptions may be more costly than normal conditional logic.
+- Failures can be incorrectly reported as successes.
+Interview-ready answer:
+Exceptions should not be swallowed because doing so hides failures and makes debugging difficult. They should not be used for normal control flow because that makes logic harder to understand and can add unnecessary overhead. I handle exceptions at the appropriate layer, log useful context, preserve their causes when rethrowing, and use normal conditions for expected cases such as validating input.
+
+
+Quick revision: Questions 86–100
+Question	One-line memory aid
+86. Checked vs unchecked	Compiler requires handling vs no requirement
+87. Exception vs Error	Potentially handleable condition vs serious runtime problem
+88. throw vs throws	Throw an object vs declare possible exceptions
+89. Try without catch	Allowed with finally or as try-with-resources
+90. Multiple catch blocks	Handle different types; specific types first
+91. Return in finally	Overrides an earlier return; avoid it
+92. Try-with-resources	Automatically closes resources
+93. AutoCloseable	Defines close()
+94. Checked custom exception	Extend Exception
+95. Unchecked custom exception	Extend RuntimeException
+96. Exception propagation	Exception moves up the call stack
+97. final / finally / finalize()	Restriction / cleanup block / deprecated legacy method
+98. Suppressed exceptions	Secondary exceptions attached to a primary exception
+99. Best practices	Specific handling, preserved causes, reliable cleanup
+100. Swallowing exceptions	Hides failures; avoid it
+
+Best way to prepare for interviews: Learn the simple definition first, then practise explaining one Java example and one production scenario for each concept.
+=========================================================================================================================
+101. What is the difference between a process and a thread?
+A process is a running program. A thread is a path of execution inside a process.
+
+Example: When you open IntelliJ IDEA, it runs as a process. Inside it, different threads may handle the user interface, background indexing, and other tasks.
+![alt text](image-19.png)
+Interview answer:
+“A process is an independent running program, whereas a thread is a smaller unit of execution within a process. Threads in the same process share heap memory, which makes communication easier but requires synchronization when shared data is modified.”
+
+Memory trick: Process = application; Thread = worker inside the application.
+102. What are the different states in a Java thread lifecycle?
+Java defines six thread states. 
+
+Oracle Docs
+
+
+
+
+1. NEW
+
+The thread object is created, but start() has not been called.
+
+
+
+
+2. RUNNABLE
+
+The thread can run or is running. Java does not define a separate RUNNING state in Thread.State.
+
+
+
+
+3. BLOCKED
+
+The thread is waiting to acquire a monitor lock to enter a synchronized method or block.
+
+
+
+
+4. WAITING
+
+The thread waits indefinitely for another thread to perform an action. Examples include wait() and join() without a timeout.
+
+
+
+
+5. TIMED_WAITING
+
+The thread waits for a specified time. Examples include sleep(1000) and wait(1000).
+
+
+
+
+6. TERMINATED
+
+The thread has completed its execution.
+
+
+
+Simple example:
+Thread t = new Thread(() -> System.out.println("Running"));
+
+System.out.println(t.getState()); // NEW
+
+t.start();
+
+
+The state may change quickly after start(), so it is not safe to expect a particular state from a later check.
+
+Memory trick: NEW → RUNNABLE → (BLOCKED / WAITING / TIMED_WAITING) → TERMINATED
+103. What is the difference between start() and run()?
+This is a very common interview question.
+class MyTask extends Thread {
+    @Override
+    public void run() {
+        System.out.println("Task running");
+    }
+}
+
+public class Main {
+    public static void main(String[] args) {
+        MyTask t = new MyTask();
+
+        t.run();   // Normal method call
+        t.start(); // Starts a new thread
+    }
+}
+
+
+Output:
+Task running
+Task running
+
+
+The output looks the same, but the execution is different.
+![alt text](image-20.png)
+Interview answer:
+“start() creates a new thread of execution and the JVM calls its run() method on that thread. Calling run() directly is just a normal method call, so it does not create a new thread.”
+
+Remember: Use start() when you want a separate thread.
+104. What is the difference between sleep() and wait()?
+Both can pause a thread, but they serve different purposes.
+![alt text](image-21.png)
+
+Example:
+synchronized (lock) {
+    lock.wait();  // Releases lock's monitor while waiting
+}
+
+
+Compare:
+synchronized (lock) {
+    Thread.sleep(1000); // Keeps lock's monitor during sleep
+}
+
+
+In the second example, another thread trying to enter a synchronized block using the same lock cannot acquire that monitor until the first thread releases it.
+
+Memory trick: sleep() = pause; wait() = release the object's monitor and wait for coordination.
+105. What is the difference between wait(), notify(), and notifyAll()?
+These methods support communication between threads.
+- wait() makes the current thread wait and releases the monitor of the object.
+- notify() wakes one thread waiting on that object's monitor.
+- notifyAll() wakes all threads waiting on that object's monitor. They must compete to reacquire the monitor.
+They must be called while the current thread owns the object's monitor, normally inside synchronized.
+
+Example:
+class Shared {
+    private boolean ready = false;
+
+    public synchronized void waitForReady()
+            throws InterruptedException {
+        while (!ready) {
+            wait();
+        }
+        System.out.println("Ready!");
+    }
+
+    public synchronized void makeReady() {
+        ready = true;
+        notifyAll();
+    }
+}
+
+
+Why use while, not if?
+
+Because a thread can wake up even though the condition is still false, or another thread may change the condition before it reacquires the lock. Checking the condition again makes the code safer.
+
+One key detail: notify() does not immediately release the monitor. The notifying thread releases it when it exits the synchronized region or otherwise releases that monitor.
+
+Memory trick: wait = pause and release; notify = wake one; notifyAll = wake all waiting threads.
+106. What is synchronization in Java?
+Synchronization controls access to shared data so that threads do not interfere with each other. It also provides memory-visibility guarantees when threads use the same synchronization mechanism.
+
+Imagine two threads updating the same bank balance. If they read and write the balance at the same time without coordination, one update could be lost.
+class Counter {
+    private int count = 0;
+
+    public synchronized void increment() {
+        count++;
+    }
+
+    public synchronized int getCount() {
+        return count;
+    }
+}
+
+
+Here, the synchronized methods use the same object's monitor. Only one thread at a time can execute a synchronized instance method on that object.
+
+Interview answer:
+“Synchronization is a mechanism in Java that coordinates multiple threads accessing shared resources. It helps prevent race conditions and establishes visibility guarantees between threads.”
+107. What is the difference between a synchronized method and a synchronized block?
+Both use a monitor lock, but the amount of code protected differs.
+
+Synchronized method:
+public synchronized void update() {
+    // Entire method is protected by this object's monitor
+}
+
+
+Synchronized block:
+public void update() {
+    // Other work can happen outside the lock
+
+    synchronized (this) {
+        // Only this section is protected
+    }
+}
+![alt text](image-22.png)
+Memory trick: Method = protect the whole method; block = protect only the required section.
+108. What is an intrinsic lock or monitor?
+Every Java object can be used as a monitor lock. This built-in mechanism is called an intrinsic lock or monitor.
+
+Example:
+synchronized (this) {
+    // Only one thread at a time can own this monitor
+}
+
+
+If Thread A owns the monitor, Thread B must wait before entering another synchronized section guarded by that same monitor.
+
+Important points:
+- Every object can serve as a monitor.
+- An instance synchronized method locks this.
+- A static synchronized method locks the class object.
+- Java's intrinsic locks are reentrant: a thread that already owns a monitor can acquire that same monitor again.
+Memory trick: A monitor is the lock that guards a synchronized section.
+109. What is the volatile keyword?
+volatile helps ensure that reads and writes of a variable are visible across threads.
+
+Example:
+class Worker {
+    private volatile boolean running = true;
+
+    public void stop() {
+        running = false;
+    }
+
+    public void work() {
+        while (running) {
+            // Do work
+        }
+    }
+}
+
+
+If one thread changes running to false, another thread reading it will observe the volatile write according to Java's memory rules.
+
+But this is important: volatile does not make compound operations atomic.
+volatile int count = 0;
+
+count++; // Still not thread-safe
+
+
+count++ involves reading, adding one, and writing back. Two threads can still interfere with each other.
+
+Interview answer:
+“volatile guarantees visibility of updates to a variable across threads and establishes ordering relationships. It does not provide mutual exclusion or make compound operations such as increment atomic.”
+110. What is the difference between volatile and synchronized?
+![alt text](image-23.png)
+
+When to choose which?
+
+Use volatile for a simple shared flag when you need visibility but do not need to protect a multi-step operation. Use synchronized, locks, or atomic classes when you need to protect shared updates or an operation involving several steps.
+
+Memory trick: volatile = visibility; synchronized = visibility + exclusive access to a protected section.
+Part 2: Race conditions and task execution — Questions 111–120
+111. What is a race condition?
+A race condition happens when the result of a program depends on the timing or order of multiple threads accessing shared data.
+
+Example:
+class Counter {
+    int count = 0;
+
+    void increment() {
+        count++;
+    }
+}
+
+
+Suppose count starts at 0, and two threads call increment() at the same time.
+
+Both threads might read 0, calculate 1, and write 1. The final value becomes 1 instead of the expected 2.
+
+This happens because count++ is not one indivisible operation.
+
+How do you prevent it? Use synchronized, a suitable lock, or an atomic class such as AtomicInteger.
+
+Interview answer:
+“A race condition occurs when multiple threads access shared state concurrently and the outcome depends on the timing of their operations. We prevent it through appropriate synchronization, atomic operations, or thread-safe data structures.”
+112. What is a deadlock, and how can you prevent it?
+A deadlock occurs when threads wait for one another's locks in a cycle, so none of them can continue.
+
+Imagine:
+- Thread A owns Lock 1 and waits for Lock 2.
+- Thread B owns Lock 2 and waits for Lock 1.
+Neither thread can proceed.
+Thread A
+
+Holds Lock 1 · Waiting for Lock 2
+
+Waits for
+
+Thread B
+
+Holds Lock 2 · Waiting for Lock 1
+
+Circular waiting → Deadlock
+
+Ways to prevent or reduce deadlock risk:
+1. Always acquire multiple locks in a consistent order.
+2. Avoid holding locks while doing slow operations, such as network calls.
+3. Use tryLock() with a timeout when using ReentrantLock, and handle failure correctly.
+4. Keep synchronized sections small and avoid unnecessary nested locks.
+Example of consistent ordering: always acquire Lock 1 before Lock 2, in every thread that needs both.
+
+Interview answer:
+“Deadlock occurs when threads wait indefinitely for locks held by one another. I prevent it by enforcing consistent lock ordering, reducing nested locking, and using timed lock acquisition where appropriate.”
+113. What are livelock and starvation?
+These are different from deadlock.
+
+![alt text](image-24.png)
+
+How can you reduce livelock? Introduce backoff, randomized delays, or a coordination rule so threads do not keep repeating the same response.
+
+How can you reduce starvation? Use fair locking or suitable scheduling and avoid letting a small set of threads monopolize resources. Fairness may reduce throughput, so it must be chosen deliberately.
+
+Memory trick: Deadlock = stuck waiting; livelock = active but not progressing; starvation = never gets a fair chance.
+114. What is the difference between Runnable and Callable?
+Both represent work that can be executed by another thread or an executor.
+![alt text](image-25.png)
+
+Example:
+Runnable task1 = () -> System.out.println("Hello");
+
+Callable<Integer> task2 = () -> 10 + 20;
+
+System.out.println(task2.call()); // 30
+
+
+In real applications, a Callable is often submitted to an ExecutorService, and its result is retrieved through a Future.
+
+Interview answer:
+“Runnable represents a task that does not return a result, while Callable returns a value and can throw checked exceptions.”
+115. What is the ExecutorService framework?
+ExecutorService is part of java.util.concurrent. It manages task execution so we do not have to manually create and manage a new thread for every task.
+
+Example:
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+
+public class Main {
+    public static void main(String[] args) {
+        ExecutorService executor =
+                Executors.newFixedThreadPool(2);
+
+        try {
+            executor.submit(() ->
+                System.out.println("Task running"));
+        } finally {
+            executor.shutdown();
+        }
+    }
+}
+
+
+A thread pool with two worker threads can reuse those workers for submitted tasks.
+
+Why is it useful?
+- Reuses threads instead of repeatedly creating them.
+- Controls how many tasks execute concurrently.
+- Can return results through submit().
+- Provides lifecycle management, including shutdown.
+In production, also consider queue capacity, task rejection, timeouts, and how exceptions are handled. For services with heavy traffic, explicitly configuring a ThreadPoolExecutor can provide more control than choosing a pool size alone.
+
+Interview answer:
+“ExecutorService separates task submission from thread management. It can run tasks using a pool of reusable threads, retrieve task results, and manage executor shutdown.”
+116. What is the difference between execute() and submit()?
+Both send work to an executor, but submit() returns a Future.
+![alt text](image-26.png)
+Example:
+executor.execute(() -> System.out.println("Task A"));
+
+Future<Integer> future = executor.submit(() -> 100);
+
+System.out.println(future.get()); // 100
+
+
+The second example requires handling InterruptedException and ExecutionException, or declaring them from the containing method.
+
+One important point: with submit(), an exception from the task may not be printed automatically. Retrieve the result or otherwise inspect the Future to detect the failure.
+
+Memory trick: execute() = send a task; submit() = send a task and get a Future.
+117. What is a thread pool, and why is it used?
+A thread pool is a group of reusable worker threads that execute submitted tasks.
+
+Imagine an application receives 500 requests. Creating a completely new thread for each task can add significant overhead and, if uncontrolled, consume too many resources.
+
+A thread pool can limit concurrent work and reuse its workers.
+ExecutorService pool =
+        Executors.newFixedThreadPool(4);
+
+
+This creates a pool with four worker threads. It does not mean only four tasks can be submitted; additional tasks may queue until a worker is available.
+
+Benefits:
+- Less overhead from repeated thread creation.
+- A limit on the number of simultaneously executing worker tasks.
+- Centralized task management.
+Production caution: An unbounded queue can grow very large under overload. For production systems, choose pool size, queue capacity, and rejection behavior based on the actual workload and resource limits.
+118. How do you choose an appropriate thread pool size?
+There is no single ideal number for every application. It depends on whether tasks use the CPU heavily or spend time waiting.
+
+CPU-bound tasks perform calculations continuously. A reasonable starting point is around the number of available CPU cores, then measure the result under load.
+
+I/O-bound tasks spend time waiting for databases, network calls, or files. More concurrent tasks may be useful, but too many can overload downstream systems or consume excessive memory.
+
+A simplified starting estimate for an I/O-heavy workload is:
+\[
+N_{\text{threads}} \approx N_{\text{cores}}\times
+\left(1+\frac{\text{waiting time}}{\text{compute time}}\right)
+\]
+
+This is only a rough heuristic, not a universal formula. Real pool sizing must consider task latency, queueing, memory use, database connection limits, rate limits, and load-test results.
+
+Senior-level interview answer:
+“I classify the workload as CPU-bound or I/O-bound, estimate a starting pool size, and validate it with load testing and metrics such as throughput, latency, queue depth, active threads, CPU usage, and downstream resource saturation. I also configure overload and rejection behavior.”
+119. What is the difference between Future and CompletableFuture?
+Both are used to represent the result of asynchronous work.
+![alt text](image-27.png)
+
+Example using Future:
+Future<Integer> future =
+        executor.submit(() -> 10 + 20);
+
+System.out.println(future.get()); // 30
+
+
+Example using CompletableFuture:
+CompletableFuture
+    .supplyAsync(() -> 10)
+    .thenApply(n -> n + 20)
+    .thenAccept(System.out::println);
+
+
+Output:
+30
+
+
+The second example creates an asynchronous result, transforms it, and then consumes it through a chain of stages. By default, async methods without an explicit executor typically use the common fork-join pool, so specify an appropriate executor when workload isolation or control is important. 
+
+Oracle Docs
++1
+
+
+
+
+Memory trick: Future = retrieve a result; CompletableFuture = compose a chain of asynchronous operations.
+120. What is CountDownLatch?
+CountDownLatch lets one or more threads wait until a counter reaches zero.
+
+Imagine a report should be generated only after three independent tasks finish.
+import java.util.concurrent.CountDownLatch;
+
+CountDownLatch latch = new CountDownLatch(3);
+
+// Each worker calls latch.countDown() when finished.
+// The coordinating thread calls latch.await().
+
+
+Conceptually:
+1. The latch begins with a count of 3.
+2. Each completed worker calls countDown().
+3. The count becomes 2, then 1, then 0.
+4. A thread waiting in await() can continue when the count reaches zero.
+Important: A CountDownLatch cannot be reset for reuse. Create a new one for a new cycle.
+
+Interview answer:
+“CountDownLatch is a one-shot synchronization aid that allows threads to wait until a fixed number of events or tasks have completed.”
+
+Memory trick: Latch = wait for a countdown to reach zero.
+Part 3: Coordination, locks, and production troubleshooting — Questions 121–130
+121. What is CyclicBarrier?
+CyclicBarrier makes a group of threads wait until all participating threads reach the same point. Then they can continue together.
+
+Example: Imagine three workers calculate parts of a report. The next phase should begin only after all three finish their current phase.
+CyclicBarrier barrier = new CyclicBarrier(3);
+
+// Each of the three worker threads calls:
+barrier.await();
+
+// They can pass the barrier after all three arrive.
+
+
+Key difference from CountDownLatch:
+![alt text](image-28.png)
+Interview answer:
+“CyclicBarrier makes a fixed group of threads wait for each other at a common synchronization point. Once all participating threads arrive, they are released, and the barrier can be used again.”
+
+Memory trick: Latch = wait for completion; Barrier = wait for everyone to arrive.
+122. What is Semaphore?
+A Semaphore controls how many threads can access a resource at the same time.
+
+Suppose your application has five database connections reserved for a particular operation. You can use a semaphore with five permits to limit how many threads enter that protected operation concurrently.
+Semaphore semaphore = new Semaphore(5);
+
+semaphore.acquire();
+try {
+    // Use the limited resource
+} finally {
+    semaphore.release();
+}
+
+
+Here:
+- acquire() takes a permit and may block if no permit is available.
+- release() returns a permit so another thread can proceed.
+Important: Always release a permit in finally after a successful acquisition. Otherwise, a permit could be lost if the operation fails.
+
+Interview answer:
+“Semaphore limits concurrent access to a resource using permits. It is useful for limiting simultaneous operations, such as access to a constrained service or resource pool.”
+
+Memory trick: Semaphore = limited entry passes.
+123. What is ReentrantLock, and how does it differ from synchronized?
+ReentrantLock is an explicit lock available in java.util.concurrent.locks.
+
+Example:
+ReentrantLock lock = new ReentrantLock();
+
+lock.lock();
+try {
+    // Critical section
+} finally {
+    lock.unlock();
+}
+
+![alt text](image-29.png)
+A reentrant lock lets the same thread acquire the same lock again without deadlocking itself; each acquisition must be matched by an unlock.
+
+When should you use it? Use synchronized for straightforward locking. Consider ReentrantLock when you need features such as timed acquisition, interruptible acquisition, or a deliberate fairness policy.
+
+Memory trick: synchronized = simple built-in lock; ReentrantLock = explicit lock with additional control.
+124. What are atomic classes such as AtomicInteger?
+Atomic classes provide thread-safe operations on individual values without requiring you to write a synchronized block for every operation.
+
+They are in java.util.concurrent.atomic.
+
+Example:
+import java.util.concurrent.atomic.AtomicInteger;
+
+AtomicInteger count = new AtomicInteger(0);
+
+count.incrementAndGet();
+count.incrementAndGet();
+
+System.out.println(count.get());
+
+
+Output:
+2
+
+
+incrementAndGet() performs the increment atomically, so concurrent increments on that same AtomicInteger are not lost.
+
+Other examples include AtomicLong, AtomicBoolean, and AtomicReference.
+
+When would you use one? Use an atomic class for simple shared state, such as a counter, sequence, flag, or reference update.
+
+Limitation: An atomic variable does not automatically make a larger operation involving several variables atomic.
+
+Interview answer:
+“Atomic classes provide thread-safe atomic operations, often using compare-and-set mechanisms. They are useful for shared counters and simple state changes without explicit locking.”
+125. What is the Java Memory Model (JMM)?
+The Java Memory Model defines the rules for how threads interact with memory: when writes by one thread become visible to another and what ordering guarantees exist between operations.
+
+Imagine:
+- Thread A writes a shared variable.
+- Thread B reads that variable.
+Without an appropriate visibility or synchronization guarantee, Thread B cannot safely rely on observing Thread A's latest update.
+
+Java provides mechanisms such as:
+- synchronized
+- volatile
+- Final-field initialization guarantees
+- Thread-safe utilities and concurrent collections
+Interview answer:
+“The Java Memory Model specifies the visibility and ordering rules for operations performed by multiple threads. It defines how synchronization mechanisms establish guarantees between threads, helping developers write correct concurrent programs.”
+
+Memory trick: JMM = rules for visibility and ordering between threads.
+126. What is the happens-before relationship?
+Happens-before is a Java Memory Model rule. It means that one action is guaranteed to be visible and ordered before another action, according to the JMM.
+
+For example, with a volatile variable:
+volatile boolean ready = false;
+
+// Thread A
+ready = true;
+
+// Thread B
+if (ready) {
+    System.out.println("Ready");
+}
+
+
+A volatile write happens-before a subsequent read of that same variable that observes the write. This gives visibility and ordering guarantees; it is not merely a way to pause or schedule threads.
+
+Other common happens-before relationships include:
+- Exiting a synchronized block happens-before another thread subsequently acquires the same monitor.
+- Actions before Thread.start() happen-before actions in the started thread.
+- Actions in a thread happen-before another thread successfully returns from joining that thread.
+Interview answer:
+“Happens-before is a formal ordering and visibility guarantee in the Java Memory Model. It ensures that actions performed before a specified synchronization event are visible to actions that occur after the corresponding event.”
+
+Memory trick: Happens-before = guaranteed visibility and ordering, not necessarily earlier wall-clock execution in every scenario.
+127. What is a concurrent collection?
+A concurrent collection is designed to support access by multiple threads safely, often with better scalability than manually synchronizing a regular collection.
+
+Common examples:
+![alt text](image-30.png)
+Example:
+ConcurrentHashMap<Integer, String> map =
+        new ConcurrentHashMap<>();
+
+map.put(101, "Laptop");
+map.put(102, "Mobile");
+
+
+Multiple threads can use this map concurrently without requiring you to synchronize every ordinary map operation yourself.
+
+However, thread-safe individual operations do not automatically make a multi-step business workflow atomic. For example, checking whether a key exists and then inserting it as two separate operations can still create a race. Use an appropriate atomic API such as putIfAbsent() when that matches the requirement.
+
+Interview answer:
+“Concurrent collections provide thread-safe data structures optimized for concurrent access. They help reduce manual locking and can improve scalability, but multi-operation workflows still need appropriate coordination.”
+128. How do you make a shared counter thread-safe?
+Three common approaches are synchronized, AtomicInteger, and LongAdder.
+
+Option 1: synchronized
+class Counter {
+    private int count;
+
+    public synchronized void increment() {
+        count++;
+    }
+
+    public synchronized int getCount() {
+        return count;
+    }
+}
+
+
+The increment and read methods use the same object's monitor.
+
+Option 2: AtomicInteger
+AtomicInteger count = new AtomicInteger();
+
+count.incrementAndGet();
+
+System.out.println(count.get());
+
+
+Option 3: LongAdder
+LongAdder counter = new LongAdder();
+
+counter.increment();
+
+System.out.println(counter.sum());
+
+
+LongAdder is especially useful for high-contention statistics, where many threads frequently increment a counter. Its sum() is not a single atomic snapshot of all concurrent updates.
+![alt text](image-31.png)
+Interview answer:
+“I choose the mechanism based on the requirement. I use AtomicInteger for a simple atomic counter, LongAdder for high-contention statistics, and synchronized or a lock when the business operation requires multiple steps to be protected together.”
+129. How do you implement producer-consumer using BlockingQueue?
+The producer creates data and puts it into a queue. The consumer takes data out of the queue and processes it.
+
+A BlockingQueue simplifies coordination because put() waits when a bounded queue is full, and take() waits when the queue is empty. 
+
+Oracle Docs
+
+
+
+import java.util.concurrent.ArrayBlockingQueue;
+import java.util.concurrent.BlockingQueue;
+
+public class ProducerConsumer {
+    public static void main(String[] args) {
+        BlockingQueue<String> queue =
+                new ArrayBlockingQueue<>(10);
+
+        Thread producer = new Thread(() -> {
+            try {
+                queue.put("Order-101");
+                queue.put("Order-102");
+            } catch (InterruptedException e) {
+                Thread.currentThread().interrupt();
+            }
+        });
+
+        Thread consumer = new Thread(() -> {
+            try {
+                String order1 = queue.take();
+                String order2 = queue.take();
+
+                System.out.println(order1);
+                System.out.println(order2);
+            } catch (InterruptedException e) {
+                Thread.currentThread().interrupt();
+            }
+        });
+
+        consumer.start();
+        producer.start();
+    }
+}
+
+
+Possible output:
+Order-101
+Order-102
+
+
+Why use BlockingQueue instead of manually synchronizing a list?
+- It is thread-safe.
+- The producer waits if the queue is full.
+- The consumer waits if the queue is empty.
+- You do not have to implement the queue's locking and waiting logic yourself.
+In a production system, you also need a shutdown strategy so consumers know when no more work will arrive. Interrupts should be handled deliberately, and tasks should not silently ignore cancellation.
+
+Interview answer:
+“I implement producer-consumer using a thread-safe BlockingQueue. Producers use put() to enqueue work, and consumers use take() to retrieve it. The queue handles synchronization and backpressure when bounded.”
+130. How would you investigate a production thread dump showing many blocked threads?
+This is a practical question for experienced Java developers.
+
+A thread dump is a snapshot of Java threads, their states, stack traces, and often lock information. The key is to find out what the threads are waiting for.
+
+Step 1 — Collect thread dumps
+
+Identify the correct JVM process. For example, use jcmd -l to list local Java processes, then run jcmd <pid> Thread.print. You can also use jstack <pid> where available.
+
+
+
+
+Step 2 — Inspect thread states and stack traces
+
+Look for many threads in BLOCKED, repeated stack traces, lock owners, and whether threads are waiting on the same application code or resource.
+
+
+
+
+Step 3 — Compare several dumps
+
+Take multiple dumps a few seconds apart. Check whether threads remain blocked on the same locks or move forward. One snapshot alone may not show the full problem.
+
+
+
+
+Step 4 — Identify the underlying cause
+
+Check for deadlocks, long-running synchronized sections, slow database or network operations, thread-pool exhaustion, and blocked downstream dependencies. Correlate findings with application metrics and logs.
+
+
+
+
+Step 5 — Fix and verify
+
+Fix the root cause, such as inconsistent lock ordering, slow work under a lock, or exhausted resources. Then verify that blocked-thread counts and request latency improve.
+
+
+
+How to interpret thread states:
+![alt text](image-32.png)
+Important: Many BLOCKED threads do not automatically mean deadlock. They may all be waiting for one slow thread to release a lock. A deadlock is a cycle of dependencies; thread dumps can report detected Java-level monitor deadlocks, but other lock or resource problems may need further investigation.
+
+Senior-level interview answer:
+
+“I would capture multiple thread dumps, inspect blocked-thread stack traces and lock ownership, and look for repeated patterns or a deadlock. I would correlate the findings with CPU usage, request latency, thread-pool metrics, and database or downstream-service latency. After identifying the bottleneck, I would address the root cause and verify the improvement with new dumps and metrics.”
+
+Quick revision: the most important differences
+![alt text](image-33.png)
 
 =========================================================================================================================
 
